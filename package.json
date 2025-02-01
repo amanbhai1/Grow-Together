@@ -7,10 +7,11 @@
   "scripts": {
     "install-all": "npm install && cd frontend && npm install",
     "start": "concurrently \"npm run start-backend\" \"npm run start-frontend\"",
-    "start-backend": "cd backend && nodemon index.js",
+    "start-backend": "cd backend && node index.js",
     "start-frontend": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build",
-    "deploy": "npm run build && node backend/index.js"
+    "build": "cd frontend && npm install && npm run build",
+    "deploy": "npm run build && node backend/index.js",
+    "deploy-all": "npm install && cd frontend && npm install && npm run build && cd .. && cd backend && npm install && nodemon index.js"
   },
   "dependencies": {
     "concurrently": "^8.2.2"
