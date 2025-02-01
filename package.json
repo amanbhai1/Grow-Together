@@ -14,7 +14,10 @@
     "deploy-all": "npm install && cd frontend && npm install && npm run build && cd .. && cd backend && npm install && nodemon index.js"
   },
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.6"
   },
   "engines": {
     "node": ">=18.0.0"
