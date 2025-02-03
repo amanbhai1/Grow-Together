@@ -5,6 +5,31 @@ import { MdOutlineStar } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
+// Dropdown banaya tha library se ui theek nhi hai
+// import { Listbox } from "@headlessui/react";
+// import { ChevronDown } from "lucide-react";
+
+// const options = [
+// "All",
+// "Engineering",
+// "Programming",
+// "Maths",
+// "Science",
+// "Sports",
+// "Music",
+// "Art",
+// "Busisness",
+// "Cooking",
+// "Crafting",
+// "Fashion",
+// "Fitness",
+// "Gaming",
+// "Language",
+// "Literature",
+// "Technology",
+// "Soft Skills",
+// "Photograpy",
+// "Hobbies"];
 
 const Search = () => {
   const navigate = useNavigate();
@@ -40,12 +65,12 @@ const Search = () => {
   }, []);
 
   return (
-    <div className="h-full w-full flex justify-start items-center mt-8">
+    <div className="flex justify-start items-center mt-8 w-full h-full">
       <div><Toaster /></div>
-      <div className="h-full w-full flex flex-col justify-start items-center">
-        <div className="w-full h-20 flex justify-center items-center">
-          <div className="flex w-1/2 bg-white rounded-xl shadow-md">
-            <select className="rounded-xl bg-teal-100 border-none px-8 py-3" value={cat} onChange={(e) => setCat(e.target.value)}>
+      <div className="flex flex-col justify-start items-center w-full h-full">
+        <div className="flex justify-center items-center w-full h-20">
+          <div className="flex bg-white shadow-md pr-4 rounded-l-3xl rounded-r-3xl w-1/2">
+            <select className="bg-teal-100 px-8 py-3 border-none rounded-l-3xl appearance-none-none" value={cat} onChange={(e) => setCat(e.target.value)}>
               <option value="All">All Category</option>
               <option value="Engineering">Engineering</option>
               <option value="Programming">Programming</option>
@@ -67,39 +92,55 @@ const Search = () => {
               <option value="Photography">Photography</option>
               <option value="Hobbies">Hobbies</option>
             </select>
+            {/* <Listbox value={cat} onChange={(e) => setCat(e.target.value)}>
+              <div className="relative w-60">
+                <Listbox.Button className="flex justify-between items-center bg-[#40ccc0] px-5 py-3 border-none rounded-l-3xl w-full">
+                  {cat}
+                  <ChevronDown className="w-5 h-5 text-gray-500" />
+                </Listbox.Button>
+
+                <Listbox.Options className="absolute border-gray-300 bg-[#40ccc0] shadow-lg backdrop-blur-sm mt-1 border rounded-lg w-full overflow-hidden">
+                  {options.map((option, index) => (
+                    <Listbox.Option key={index} value={option} className="hover:bg-gray-100 p-3 cursor-pointer">
+                      {option}
+                    </Listbox.Option>
+                  ))}
+                </Listbox.Options>
+              </div>
+            </Listbox> */}
             <input
               type="text"
               placeholder="Search for a course"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="h-10 w-full bg-transparent border-none text-black pl-2 outline-none"
+              className="bg-transparent pl-5 border-none w-full h-10 text-black outline-none"
             />
             <button
               onClick={(e) => { e.preventDefault(); getSearchResult(filter); }}
-              className="h-10 w-10 bg-transparent text-black rounded-full border-0">
-              <CiSearch className="text-2xl mr-2" />
+              className="border-0 bg-transparent rounded-full w-10 h-10 text-black">
+              <CiSearch className="mr-2 text-2xl" />
             </button>
           </div>
         </div>
-        <ul className="w-5/6 overflow-y-auto list-none p-0 grid grid-cols-3 gap-1 mt-4">
+        <ul className="gap-1 grid grid-cols-3 mt-4 p-0 w-5/6 overflow-y-auto list-none">
           {results.map((item, index) => (
             <div
-              className="shadow-md border p-2 m-2 mb-2 rounded-lg flex flex-row gap-4 items-start relative hover:scale-95 transition-transform duration-300 hover:shadow-xl hover:shadow-teal-100/50 hover:brightness-95"
+              className="relative hover:brightness-95 flex flex-row items-start gap-4 shadow-md hover:shadow-xl hover:shadow-teal-100/50 m-2 mb-2 p-2 border rounded-lg hover:scale-95 transition-transform duration-300"
               key={index}
               onClick={() => handleTile(item.courseId)}
             >
               <img
                 src={`/images/${item.category}.jpg`}
-                className="w-1/2 h-full object-cover rounded-md"
+                className="rounded-md w-1/2 h-full object-cover"
                 loading="lazy"
               />
-              <p className="absolute bottom-2 left-2 border border-[rgba(200,109,223,0.633)] px-4 py-2 bg-red-200 rounded-full flex justify-center items-center text-lg">
+              <p className="bottom-2 left-2 absolute flex justify-center items-center border-[rgba(200,109,223,0.633)] bg-red-200 px-4 py-2 border rounded-full text-lg">
                 {item.rating}<MdOutlineStar className="text-xs" />
               </p>
-              <div className="w-full p-2 flex items-end">
+              <div className="flex items-end p-2 w-full">
                 <div className="flex flex-col gap-2">
-                  <p className="text-2xl font-semibold font-sans text-teal-700">{item.courseName}</p>
-                  <p className="text-xl text-red-300">By {item.courseTutor}</p>
+                  <p className="font-sans font-semibold text-2xl text-teal-700">{item.courseName}</p>
+                  <p className="text-red-300 text-xl">By {item.courseTutor}</p>
                   <p className="line-clamp-5 text-lg">{item.courseDesc}</p>
                 </div>
               </div>

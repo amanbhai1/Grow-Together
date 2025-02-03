@@ -12,10 +12,10 @@ const Timestamp = (item) => {
       });
 
       const styles = {
-        color: '#4a4a4a',  
-        fontSize: '10px',    
+        color: '#ffffff',
+        fontSize: '10px',
         fontFamily: 'Arial, sans-serif',
-        backgroundColor:'black',
+        backgroundColor:'#0D9488',
         width: 'fit-content',
         padding: '5px',
         borderRadius: '6px'

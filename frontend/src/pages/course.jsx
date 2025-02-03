@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import '../style/course.css'
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import Discussion from '../components/discussion';
@@ -46,7 +45,7 @@ const Course = () => {
     .then(res=>{
         if(res.status===200) 
         {
-            toast.success('Successfully enrolled!')
+            toast.success('Successfully enrolled!'),
             setIsEnrolled(!isEnrolled)
         }
         else
@@ -83,7 +82,6 @@ const Course = () => {
     };
     getRating();
   }, [reload]);
-
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
@@ -236,97 +234,98 @@ const Course = () => {
 
 
   return (
-    <div className='course'>
+    <div className="mx-auto px-4 py-8 container">
       <div><Toaster/></div>
-      <div className='course-head'>
-        <div className='course-opt'>
-          {courseDetails.courseName} videos
+      <div className="flex justify-between items-center mb-8">
+        <div className="font-semibold text-2xl">{courseDetails.courseName} Videos</div>
+        <div className="flex space-x-4">
           {isEnrolled ? (
-              <button className='y' onClick={() =>handleUnenroll()}>Enrolled <IoCheckmark className='tick'/></button>
+              <button className="flex items-center space-x-2 bg-green-500 px-4 py-2 rounded-full text-white" onClick={() => handleUnenroll()}>
+                <IoCheckmark className="text-lg" />
+                <span>Enrolled</span>
+              </button>
             ) : (
-              <button className='n' onClick={() =>handleEnroll()}>Enroll</button>
+              <button className="bg-blue-500 px-4 py-2 rounded-full text-white" onClick={() => handleEnroll()}>Enroll</button>
             )}
-          <button className="add-video" onClick={() => setShowPopup(!showPopup)}>Rate</button>
-          <button className="add-video" onClick={() => setSlotPopup(!slotPopup)}>Appointment</button>
+          <button className="bg-yellow-500 px-4 py-2 rounded-full text-white" onClick={() => setShowPopup(!showPopup)}>Rate</button>
+          <button className="bg-purple-500 px-4 py-2 rounded-full text-white" onClick={() => setSlotPopup(!slotPopup)}>Appointment</button>
         </div>
-        <button className="go-back" onClick={goBack}>Go Back 🡭</button>
       </div>
-      <div className='course-body'>
-        <div className='course-videos'>
-          <ul className='video-ul'>
-            {videos.map((item, index) => (
-                <li className='video-li' key={index} onClick={() => playVideo(item)}>
-                  <div className='video-thumb'>
 
+      <div className="mb-8">
+        <button className="bg-gray-700 px-4 py-2 rounded-full text-white" onClick={goBack}>Go Back 🡭</button>
+      </div>
+
+      <div className="flex space-x-8">
+        <div className="flex-1">
+          <ul className="space-y-4">
+            {videos.map((item, index) => (
+                <li key={index} className="flex justify-between items-center bg-gray-100 hover:bg-gray-200 p-4 rounded-md cursor-pointer" onClick={() => playVideo(item)}>
+                  <div>
+                    <p className="font-semibold text-lg">{item.videoName}</p>
+                    <Timestamp timestamp={item.createdAt} />
                   </div>
-                  <div className='video-det'>
-                    <p className="video-name" >{item.videoName}</p>
-                    <Timestamp timestamp={item.createdAt}/>
-                  </div>
-                  <div className='video-seq'>
-                    <p>{item.videoSequence}</p>
-                  </div>
+                  <div className="text-sm">{item.videoSequence}</div>
                 </li>
             ))}
-            {showPlay && (
-            <div className='video-popup'>
-              <div className='video-nav'>
-                <h2>{videoDetails.videoName} now playing...</h2>
-                <AiFillCloseCircle className='close-btn' onClick={()=> setShowPlay(!showPlay)} />
+          </ul>
+          {showPlay && (
+            <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+              <div className="bg-white p-6 rounded-lg w-full max-w-3xl">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="font-semibold text-2xl">{videoDetails.videoName} now playing...</h2>
+                  <AiFillCloseCircle className="text-2xl cursor-pointer" onClick={() => setShowPlay(!showPlay)} />
+                </div>
+                <Play videoDetails={videoDetails}/>
               </div>
-              <Play videoDetails={videoDetails}/>
-                
             </div>
           )}
-          </ul>
         </div>
-        <div className='course-discussion'>
+
+        <div className="w-1/3">
           <Discussion courseId={courseId} course={courseDetails} senderId={user.id}/>
         </div>
-        {showPopup && (
-              <div className='popup'>
-                  <div className='popup-content'>
-                    <div className="rate-nav">
-                        <h2>Rate this course</h2>
-                        <AiFillCloseCircle className='rate-close-btn' onClick={()=> setShowPopup(!showPopup)} />
-                    </div>
-                      <StarRatings
-                        rating={rating}
-                        starRatedColor="gold" 
-                        changeRating={handleRatingChange} 
-                        numberOfStars={5} 
-                        name="rating"
-                      />
-                      
-                      <button className='rate-submit' onClick={()=> rateCourse()}>Submit</button>
-                  </div>
-              </div>
-            )}
-
-            {slotPopup && (
-              <div className='popup'>
-                  <div className='popup-content'>
-                    <div className="rate-nav">
-                        <h2>Enter your prefered slots</h2>
-                        <AiFillCloseCircle className='rate-close-btn' onClick={()=> setSlotPopup(!slotPopup)} />
-                    </div>
-                      <input className='inp'
-                          type="text"
-                          id="slots"
-                          placeholder='List your prefered date and time'
-                          value={slots}
-                          onChange={(e) => setSlots(e.target.value)}
-                          autoComplete="slots"
-                          required
-                      />
-                      <button className='rate-submit' onClick={()=> bookSlot()}>Submit</button>
-                  </div>
-              </div>
-          )}
       </div>
+
+      {showPopup && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-lg">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-semibold text-2xl">Rate this course</h2>
+              <AiFillCloseCircle className="text-2xl cursor-pointer" onClick={() => setShowPopup(!showPopup)} />
+            </div>
+            <StarRatings
+              rating={rating}
+              starRatedColor="gold" 
+              changeRating={handleRatingChange} 
+              numberOfStars={5} 
+              name="rating"
+            />
+            <button className="bg-blue-500 mt-4 px-4 py-2 rounded-full text-white" onClick={() => rateCourse()}>Submit</button>
+          </div>
+        </div>
+      )}
+
+      {slotPopup && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-lg">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-semibold text-2xl">Enter your preferred slots</h2>
+              <AiFillCloseCircle className="text-2xl cursor-pointer" onClick={() => setSlotPopup(!slotPopup)} />
+            </div>
+            <input 
+              className="mb-4 p-2 border rounded-md w-full"
+              type="text"
+              placeholder="List your preferred date and time"
+              value={slots}
+              onChange={(e) => setSlots(e.target.value)}
+            />
+            <button className="bg-purple-500 px-4 py-2 rounded-full text-white" onClick={() => bookSlot()}>Submit</button>
+          </div>
+        </div>
+      )}
     </div>
-  )
-}
+  );
+};
 
-
-export default Course
+export default Course;
