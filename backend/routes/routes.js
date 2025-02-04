@@ -23,6 +23,104 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
+const nodemailer = require('nodemailer');
+const otpGenerator = require('otp-generator');
+
+// OTP storage (temporary, use a database like Redis in production)
+const otpStorage = {};
+
+// Nodemailer configuration
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, // Replace with your email
+    pass: process.env.EMAIL_PASS, // Replace with your email password
+  },
+});
+
+// Generate and send OTP
+router.post('/generateOTP', async (req, res) => {
+  const { email } = req.body;
+
+  // Generate a 6-digit OTP
+  const otp = otpGenerator.generate(6, {
+    digits: true,
+    alphabets: false,
+    upperCase: false,
+    specialChars: false,
+  });
+
+  // Store OTP in memory (or use Redis in production)
+  otpStorage[email] = otp;
+
+  // Send OTP via email
+  const mailOptions = {
+    from: 'your-email@gmail.com',
+    to: email,
+    subject: 'OTP for Signup - The Code Sneaker\'s',
+    text: `Your OTP for signup is: ${otp}`,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error('Error sending OTP:', error);
+      return res.status(500).json({ message: 'Failed to send OTP' });
+    }
+    console.log('OTP sent:', info.response);
+    res.status(200).json({ message: 'OTP sent to email' });
+  });
+});
+
+// Verify OTP
+router.post('/verifyOTP', async (req, res) => {
+  const { email, otp } = req.body;
+
+  // Check if OTP matches
+  if (otpStorage[email] === otp) {
+    delete otpStorage[email]; // Clear OTP after verification
+    res.status(200).json({ message: 'OTP verified successfully' });
+  } else {
+    res.status(400).json({ message: 'Invalid OTP' });
+  }
+});
+
+// Signup route
+router.post('/signup', async (req, res) => {
+  const { name, email, password, roll } = req.body;
+
+  try {
+    const userId = generateUserId(); // Assuming you have a function to generate user IDs
+    const fname = name;
+    const lname = '';
+    const mobile = '';
+    const language = '';
+
+    // Hash password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create new user
+    const newUser = new User({
+      userId,
+      fname,
+      lname,
+      email,
+      roll,
+      mobile,
+      language,
+      password: hashedPassword,
+    });
+
+    // Save user to database
+    const savedUser = await newUser.save();
+    res.status(200).json({ user: savedUser, message: 'User registered successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: error.message });
+  }
+});
+
+
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
@@ -39,28 +137,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/signup', async (req, res) => {
-  const { name, email, password, roll } = req.body;
-    try {
-      const userId = generateUserId();
-      const fname = name
-      const lname = ''
-      const mobile = ''
-      const language = ''
 
-      const saltRounds = 10;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-      const newUser = new User({ userId, fname, lname, email, roll, mobile, language, password:hashedPassword });
-      const savedUser = await newUser.save();
-      res.status(200).json({ user:savedUser, message: 'message from server' });
-    } 
-    catch (error) {
-      console.log(error)
-      res.status(400).json({ message: error.message });
-    }
- 
-});
 
 router.post('/getProfile', auth, async (req, res) => {
   const { userId } = req.body;

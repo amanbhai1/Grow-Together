@@ -1,0 +1,10 @@
+.DS_Store
+node_modules
+npm-debug.log
+*.orig
+*.log
+tmp
+test
+
+# ignore emacs scratch files
+*~
