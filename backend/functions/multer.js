@@ -3,18 +3,28 @@ const path = require('path');
 const { generateVideoId } = require('./utility');
 
 // Configure Multer Storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // Set destination folder for uploaded videos
-    cb(null, 'videos');
-  },
-  filename: function (req, file, cb) {
-    // Generate a unique filename
-    const uniqueSuffix = generateVideoId();
-    const fileExtension = path.extname(file.originalname); // Get file extension
-    cb(null, `${uniqueSuffix}${fileExtension}`); // Save file with unique ID
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+require('dotenv').config();
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Update Storage to Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'videos', // Folder in Cloudinary
+    resource_type: 'video', // Store as video
+    allowed_formats: ['mp4', 'mkv', 'avi', 'mov'], // Allowed formats
+    public_id: (req, file) => `video_${Date.now()}`, // Unique filename
   },
 });
+
 
 // File Filter to Allow Only Video Files
 const fileFilter = function (req, file, cb) {

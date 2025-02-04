@@ -1,61 +1,77 @@
-import React,{ useEffect, useState } from 'react'
-import '../style/play.css'
+import React, { useEffect, useState, useRef } from 'react';
+import 'video.js/dist/video-js.css';
+import videojs from 'video.js';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import toast, { Toaster } from 'react-hot-toast';
 
-const Play = (item) => {
+const Play = ({ videoDetails }) => {
   const user = useSelector((state) => state.user.user);
-  const [video, setVideo] = useState(item.videoDetails)
+  const [video, setVideo] = useState(videoDetails);
   const [videoUrl, setVideoUrl] = useState('');
+  const videoRef = useRef(null);
+  const playerRef = useRef(null);
 
-    useEffect(() => {
-        const fetchVideo = async () => {
-            try {
-                const response = await axios.post('http://localhost:5000/api/playVideo', {filename:video.videoId}, {
-                  responseType: 'blob',
-                  headers: {
-                    Authorization: `Bearer ${user.token}`
-                  }
-              });
-                if (response) {
-                    const url = URL.createObjectURL(response.data);
-                    setVideoUrl(url);
-                } 
-                else {
-                    toast.error('Failed to fetch video');
-                }
-            } catch (error) {
-                toast.error('Error fetching video');
-            }
-        };
+  useEffect(() => {
+    const fetchVideo = async () => {
+      if (!video.videoId) return;
+      try {
+        const response = await axios.post(
+          'http://localhost:5000/api/playVideo',
+          { filename: video.videoId },
+          {
+            headers: { Authorization: `Bearer ${user?.token}` },
+          }
+        );
+        if (response.data.videoUrl) {
+          setVideoUrl(response.data.videoUrl);
+        } else {
+          toast.error('Failed to fetch video');
+        }
+      } catch (error) {
+        toast.error('Error fetching video');
+      }
+    };
 
-        fetchVideo();
+    fetchVideo();
+  }, [video.videoId, user?.token]);
 
-        return () => {
-            if (videoUrl) {
-                URL.revokeObjectURL(videoUrl);
-            }
-        };
-    }, [video.videoId]);
+  useEffect(() => {
+    if (videoUrl && videoRef.current) {
+      if (!playerRef.current) {
+        playerRef.current = videojs(videoRef.current, {
+          controls: true,
+          autoplay: true,
+          preload: 'auto',
+        });
+      }
 
-  
+      playerRef.current.src({ src: videoUrl, type: 'video/mp4' });
+
+      return () => {
+        if (playerRef.current) {
+          playerRef.current.dispose();
+          playerRef.current = null;
+        }
+      };
+    }
+  }, [videoUrl]);
+
   return (
     <div className='play'>
-      <div><Toaster/></div>
+      <Toaster />
       <div className='play-box'>
         {videoUrl ? (
-          <video className='player' width="600" controls autoPlay >
+          <video ref={videoRef} id="my-video" className="video-js vjs-default-skin" width="600" controls>
             <source src={videoUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         ) : (
           <p>Loading video...</p>
         )}
-        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-
-export default Play
+export default Play;

@@ -14,7 +14,14 @@ const upload = require('../functions/multer');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const cloudinary = require('cloudinary').v2;
 
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -312,37 +319,62 @@ router.post('/addVideo', auth, upload.single('video'), async (req, res) => {
 
 router.post('/deleteVideo', auth, async (req, res) => {
   const { videoId } = req.body;
-  try{
+  try {
+    // Delete the video from the database
     const result = await Video.deleteOne({ videoId: videoId });
 
     if (result.deletedCount === 0) {
       return res.status(404).json({ message: 'Video not found' });
     }
-    res.status(200).json({message: 'message from server' });
-  }
-  catch (error){
-    console.log(error) 
+
+    // Delete the video from Cloudinary
+    const fullFilename = `videos/${videoId}`;
+    cloudinary.uploader.destroy(fullFilename, { resource_type: 'video' }, (error, result) => {
+      if (error) {
+        console.error('Error deleting video from Cloudinary:', error);
+        return res.status(500).json({ message: 'Error deleting video from Cloudinary' });
+      }
+
+      console.log('Cloudinary delete result:', result);
+      res.status(200).json({ message: 'Video deleted successfully' });
+    });
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 });
 
 router.post('/playVideo', auth, async (req, res) => {
   const { filename } = req.body;
-  try{
-    const videoPath = path.join(__dirname, '..', 'uploads/videos', `${filename}.mp4`);
-    
-    if (!fs.existsSync(videoPath)) {
-      return res.status(404).json({ message: 'Video not found' });
-    }
+  try {
+    // Include the folder path in the filename
+    const fullFilename = `videos/${filename}`;
 
-    res.sendFile(videoPath, (err) => {
-        if (err) {
-          res.status(404).send('Video not found');
-        }
+    // Generate the Cloudinary URL for the video (using MP4 format)
+    const videoUrl = cloudinary.url(fullFilename, {
+      resource_type: 'video',
+      format: 'mp4', // Ensure the format is MP4
+      quality: 'auto', // Automatically adjust video quality based on the user's network
+      secure: true // Ensure the URL is HTTPS
     });
-  }
-  catch (error){
-    console.log(error) 
+
+    console.log('Generated video URL:', videoUrl);
+
+    // Check if the video exists on Cloudinary
+    cloudinary.api.resource(fullFilename, { resource_type: 'video' }, (error, result) => {
+      if (error) {
+        console.error('Error fetching video from Cloudinary:', error);
+        return res.status(404).json({ message: 'Video not found on Cloudinary' });
+      }
+
+      // Log the result for debugging
+      console.log('Cloudinary resource result:', result);
+
+      // Send the video URL as a response
+      res.status(200).json({ videoUrl });
+    });
+  } catch (error) {
+    console.error('Error:', error);
     res.status(500).json({ message: error.message });
   }
 });
