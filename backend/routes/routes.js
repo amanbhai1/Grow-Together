@@ -329,7 +329,7 @@ router.post('/deleteVideo', auth, async (req, res) => {
 router.post('/playVideo', auth, async (req, res) => {
   const { filename } = req.body;
   try{
-    const videoPath = path.join(__dirname, '..', 'videos', `${filename}.mp4`);
+    const videoPath = path.join(__dirname, '..', 'uploads/videos', `${filename}.mp4`);
     
     if (!fs.existsSync(videoPath)) {
       return res.status(404).json({ message: 'Video not found' });
