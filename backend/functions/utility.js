@@ -2,12 +2,13 @@ const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const nodemailer = require('nodemailer');
+require('dotenv').config(); // Load environment variables
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'aman.gupta_bca23@gla.ac.in',
-    pass: 'mxvo rtbm fwcd qpyx',
+    user: process.env.EMAIL_USER, // Use environment variables
+    pass: process.env.EMAIL_PASS, // Use environment variables
   },
 });
 
@@ -16,13 +17,15 @@ function sendMail(mailOptions) {
   return 0;
 }
 
+// Generate JWT Token with a stronger secret key and HS256 algorithm
 const generateToken = (userId) => {
-  const token = jwt.sign({ id: userId }, 'talentswapkey', {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: '1h',
+    algorithm: 'HS256',
   });
-  return token;
 };
 
+// Generate unique IDs
 function generateUserId() {
   return `USER-${uuidv4()}`;
 }
@@ -43,5 +46,12 @@ function getVideoId(filename) {
   return path.basename(filename, path.extname(filename));
 }
 
-
-module.exports = { generateCourseId, generateVideoId, getVideoId, generateChatId, generateUserId, generateToken, sendMail };
+module.exports = { 
+  generateCourseId, 
+  generateVideoId, 
+  getVideoId, 
+  generateChatId, 
+  generateUserId, 
+  generateToken, 
+  sendMail 
+};
