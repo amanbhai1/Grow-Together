@@ -9,6 +9,7 @@ import Layout from "./components/layouts/Layout";
 import AuthLayout from "./components/layouts/AuthLayout";
 
 import Home from "./pages/Home.jsx";
+import Dash from "./pages/dash.jsx";
 import Password from "./pages/forgotPassword.jsx";
 import Login from "./pages/login.jsx";
 import Signup from "./pages/signup.jsx";
@@ -45,6 +46,7 @@ const App = () => {
               <Route path="/mentor/dashboard" element={<MentorDashboard />} />
               <Route path="/mentor-category" element={<MentorCategory />} />
               <Route path="/feedback" element={<Feedback />} />
+              <Route path="/dash" element={<Dash/>}/>
             </Route>
 
             {/* Auth Layout */}
