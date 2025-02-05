@@ -1,0 +1,92 @@
+[
+    {
+      "id": 1,
+      "name": "John Doe",
+      "courses": [
+        {
+          "title": "React Basics",
+          "completed": 80,
+          "totalLessons": 10,
+          "progress": "In Progress"
+        },
+        {
+          "title": "JavaScript Fundamentals",
+          "completed": 90,
+          "totalLessons": 12,
+          "progress": "Completed"
+        },
+        {
+          "title": "Node.js Essentials",
+          "completed": 60,
+          "totalLessons": 8,
+          "progress": "In Progress"
+        },
+        {
+          "title": "CSS Mastery",
+          "completed": 70,
+          "totalLessons": 10,
+          "progress": "In Progress"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Jane Smith",
+      "courses": [
+        {
+          "title": "React Basics",
+          "completed": 70,
+          "totalLessons": 10,
+          "progress": "In Progress"
+        },
+        {
+          "title": "JavaScript Fundamentals",
+          "completed": 85,
+          "totalLessons": 12,
+          "progress": "Completed"
+        },
+        {
+          "title": "Node.js Essentials",
+          "completed": 50,
+          "totalLessons": 8,
+          "progress": "In Progress"
+        },
+        {
+          "title": "CSS Mastery",
+          "completed": 80,
+          "totalLessons": 10,
+          "progress": "In Progress"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Bob Johnson",
+      "courses": [
+        {
+          "title": "React Basics",
+          "completed": 90,
+          "totalLessons": 10,
+          "progress": "Completed"
+        },
+        {
+          "title": "JavaScript Fundamentals",
+          "completed": 95,
+          "totalLessons": 12,
+          "progress": "Completed"
+        },
+        {
+          "title": "Node.js Essentials",
+          "completed": 70,
+          "totalLessons": 8,
+          "progress": "In Progress"
+        },
+        {
+          "title": "CSS Mastery",
+          "completed": 85,
+          "totalLessons": 10,
+          "progress": "In Progress"
+        }
+      ]
+    }
+  ]
