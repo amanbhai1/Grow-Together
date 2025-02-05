@@ -32,11 +32,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  role: {
-    type: String,
-    enum: ['user', 'admin'],
-    default: 'user',
-  },
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
   enrolledCourses: [
     {
       type: String,
