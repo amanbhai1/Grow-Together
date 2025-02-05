@@ -11,6 +11,7 @@ function Signup() {
   const [password, setPassword] = useState('');
   const [rpassword, setRPassword] = useState('');
   const [roll, setRoll] = useState('');
+  const [role, setRole] = useState('');
   const [otp, setOtp] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
@@ -66,17 +67,21 @@ function Signup() {
   }
 
   function handleRegister() {
-    const role = isAdmin ? 'admin' : 'user'; // Determine the role
+    const role = isAdmin ? 'admin' : 'user'; // Determine the role dynamically
+  
     axios
       .post('http://localhost:5000/api/signup', { name, email, password, roll, role })
       .then((res) => {
-        if (res.status === 200) {
+        if (res.status >= 200 && res.status < 300) {  // Check for any success status (200-299)
           toast.success('User registered successfully!');
+          
+          // Reset input fields
           setName('');
           setEmail('');
           setPassword('');
           setRPassword('');
-          setRoll('');
+          setRoll(''); // Ensure 'roll' exists in your state or remove it if unnecessary
+  
           navigate('/login'); // Redirect to login after successful signup
         } else {
           toast.error('Failed to register. Please check your details.');

@@ -14,6 +14,7 @@ const upload = require('../functions/multer');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary').v2;
 
 // Configure Cloudinary
@@ -55,7 +56,7 @@ router.post('/generateOTP', async (req, res) => {
 
   // Send OTP via email
   const mailOptions = {
-    from: 'your-email@gmail.com',
+    from: process.env.EMAIL_USER,
     to: email,
     subject: 'OTP for Signup - The Code Sneaker\'s',
     text: `Your OTP for signup is: ${otp}`,
@@ -84,16 +85,32 @@ router.post('/verifyOTP', async (req, res) => {
   }
 });
 
-// Signup route
 router.post('/signup', async (req, res) => {
-  const { name, email, password, roll } = req.body;
-
   try {
-    const userId = generateUserId(); // Assuming you have a function to generate user IDs
-    const fname = name;
-    const lname = '';
-    const mobile = '';
-    const language = '';
+    const { name, email, password, roll, role } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    // Validate role
+    const validRoles = ['admin', 'user'];
+    if (!validRoles.includes(role.toLowerCase())) {
+      return res.status(400).json({ success: false, message: 'Invalid role. Must be admin or learner' });
+    }
+
+    // Normalize email
+    const normalizedEmail = email.toLowerCase();
+
+    // Check if email already exists
+    const existingUser = await User.findOne({ email: normalizedEmail });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: 'Email already registered' });
+    }
+
+    // Generate a unique user ID
+    const userId = `user_${Date.now()}`;
 
     // Hash password
     const saltRounds = 10;
@@ -102,42 +119,65 @@ router.post('/signup', async (req, res) => {
     // Create new user
     const newUser = new User({
       userId,
-      fname,
-      lname,
-      email,
-      roll,
-      mobile,
-      language,
+      fname: name,
+      lname: '',
+      email: normalizedEmail,
+      roll: roll || null, // Ensure roll is handled correctly
+      role: role.toLowerCase(), // Store role properly
+      mobile: '',
+      language: '',
       password: hashedPassword,
     });
 
     // Save user to database
-    const savedUser = await newUser.save();
-    res.status(200).json({ user: savedUser, message: 'User registered successfully' });
+    await newUser.save();
+
+    res.status(201).json({ success: true, message: 'User registered successfully' });
   } catch (error) {
-    console.error(error);
-    res.status(400).json({ message: error.message });
+    console.error('Signup Error:', error);
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
-
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.status(201).json({ message: 'Invalid credentials' });
-  }
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (isMatch){
-    const token = generateToken(user.userId);
-    res.status(200).json({ user:user, token:token, message: 'message from server' });
-  }
-  else{
-    res.status(201).json({ message: 'Wrong password' });
+
+  try {
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'User not found' });
+    }
+
+    // Compare passwords
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user.userId, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    // Return user data and token
+    res.status(200).json({
+      user: {
+        userId: user.userId,
+        fname: user.fname,
+        email: user.email,
+        role: user.role,
+      },
+      token,
+      message: 'Login successful',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Something went wrong' });
   }
 });
-
-
 
 router.post('/getProfile', auth, async (req, res) => {
   const { userId } = req.body;
@@ -200,7 +240,6 @@ router.post('/updateProfile', auth, async (req, res) => {
     }
  
 });
-
 
 router.post('/getCourseList', auth, async (req, res) => {
   const { email } = req.body;
