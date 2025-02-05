@@ -201,6 +201,7 @@ router.post('/updateProfile', auth, async (req, res) => {
  
 });
 
+
 router.post('/getCourseList', auth, async (req, res) => {
   const { email } = req.body;
   try{

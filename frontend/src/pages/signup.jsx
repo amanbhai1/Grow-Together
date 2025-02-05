@@ -14,6 +14,9 @@ function Signup() {
   const [otp, setOtp] = useState('');
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [isResendDisabled, setIsResendDisabled] = useState(false);
+  const [resendTimer, setResendTimer] = useState(30);
+  const [isAdmin, setIsAdmin] = useState(false); // New state for admin role
 
   function goBack() {
     navigate('/');
@@ -32,6 +35,7 @@ function Signup() {
         if (res.status === 200) {
           toast.success('OTP sent to email!');
           setIsOtpSent(true);
+          startResendTimer();
         } else {
           toast.error('Failed to send OTP. Please check your email.');
         }
@@ -62,8 +66,9 @@ function Signup() {
   }
 
   function handleRegister() {
+    const role = isAdmin ? 'admin' : 'user'; // Determine the role
     axios
-      .post('http://localhost:5000/api/signup', { name, email, password, roll })
+      .post('http://localhost:5000/api/signup', { name, email, password, roll, role })
       .then((res) => {
         if (res.status === 200) {
           toast.success('User registered successfully!');
@@ -81,6 +86,38 @@ function Signup() {
         console.error(err);
         toast.error('Something went wrong!');
       });
+  }
+
+  function handleResendOtp() {
+    setIsResendDisabled(true);
+    axios
+      .post('http://localhost:5000/api/generateOTP', { email })
+      .then((res) => {
+        if (res.status === 200) {
+          toast.success('OTP resent to email!');
+          startResendTimer();
+        } else {
+          toast.error('Failed to resend OTP. Please try again.');
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error('Something went wrong!');
+      });
+  }
+
+  function startResendTimer() {
+    let timer = 30;
+    const interval = setInterval(() => {
+      setResendTimer((prev) => {
+        if (prev === 0) {
+          clearInterval(interval);
+          setIsResendDisabled(false);
+          return 30;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   }
 
   return (
@@ -158,6 +195,18 @@ function Signup() {
                   required
                 />
               </div>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="isAdmin"
+                  checked={isAdmin}
+                  onChange={(e) => setIsAdmin(e.target.checked)}
+                  className="mr-2"
+                />
+                <label htmlFor="isAdmin" className="text-gray-700">
+                  Sign up as Admin
+                </label>
+              </div>
               <button
                 type="submit"
                 className="w-full bg-teal-300 hover:bg-teal-100 py-2 rounded-lg shadow-lg transition transform hover:scale-95"
@@ -168,6 +217,9 @@ function Signup() {
           ) : (
             <form onSubmit={handleVerifyOtp} className="space-y-6">
               <h2 className="text-2xl text-gray-700 font-semibold text-center mb-6">Verify OTP</h2>
+              <p className="text-center text-gray-600">
+                OTP sent to <span className="font-semibold">{email}</span>
+              </p>
               <div>
                 <input
                   type="text"
@@ -184,6 +236,18 @@ function Signup() {
               >
                 Verify OTP
               </button>
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={isResendDisabled}
+                  className={`text-sm text-teal-600 hover:underline ${
+                    isResendDisabled ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                >
+                  Resend OTP {isResendDisabled && `(${resendTimer}s)`}
+                </button>
+              </div>
             </form>
           )}
 
