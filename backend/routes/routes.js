@@ -16,6 +16,7 @@ const fs = require('fs');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cloudinary = require('cloudinary').v2;
+const Message = require('../models/messageModel.js'); // Import the Message model
 
 // Configure Cloudinary
 cloudinary.config({
@@ -666,6 +667,27 @@ router.post('/getNotification', auth, async (req, res) => {
   catch (error){
     console.log(error)
     res.status(500).json({ message: error.message });
+  }
+});
+
+router.get('/messages', async (req, res) => {
+  try {
+    const messages = await Message.find().sort({ timestamp: 1 }); // Sort messages by timestamp
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching messages' });
+  }
+});
+
+// Send a new chat message
+router.post('/messages', async (req, res) => {
+  const { user, message } = req.body;
+  try {
+    const newMessage = new Message({ user, message });
+    await newMessage.save();
+    res.status(201).json(newMessage);
+  } catch (error) {
+    res.status(500).json({ message: 'Error sending message' });
   }
 });
 

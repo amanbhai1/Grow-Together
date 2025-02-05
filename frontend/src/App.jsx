@@ -26,6 +26,7 @@ import Meeting from "./pages/Meeting.jsx";
 import Room from "./pages/Room.jsx";
 import MentorDashboard from "./pages/MentorDashboard.jsx";
 import Feedback from "./pages/Feedback.jsx";
+import LMSMeeting from "./pages/LMSMeeting.jsx";
 
 const App = () => {
   return (
@@ -47,6 +48,7 @@ const App = () => {
               <Route path="/mentor-category" element={<MentorCategory />} />
               <Route path="/feedback" element={<Feedback />} />
               <Route path="/dash" element={<Dash/>}/>
+              <Route path="/meeting" element={<LMSMeeting />} />
             </Route>
 
             {/* Auth Layout */}
