@@ -12,6 +12,7 @@ function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isAdmin, setIsAdmin] = useState(false); // State to check if the user is an admin
 
     function goBack() {
         navigate('/');
@@ -19,13 +20,23 @@ function Login() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        axios.post('http://localhost:5000/api/login', { email, password })
+        const loginEndpoint = isAdmin ? 'http://localhost:5000/api/admin/login' : 'http://localhost:5000/api/login';
+
+        axios.post(loginEndpoint, { email, password })
             .then(res => {
                 if (res.status === 200) {
-                    dispatch(login({ name: res.data.user.fname, id: res.data.user.userId, email: email, password: password, token: res.data.token }));
+                    dispatch(login({ 
+                        name: res.data.user.fname, 
+                        id: res.data.user.userId, 
+                        email: email, 
+                        password: password, 
+                        token: res.data.token,
+                        isAdmin: isAdmin // Include admin status in the login action
+                    }));
                     setEmail('');
                     setPassword('');
-                    navigate('/learner');
+                    // Navigate to admin dashboard if admin, else to learner dashboard
+                    navigate(isAdmin ? '/admin/dashboard' : '/learner');
                 } else if (res.status === 201) {
                     toast.error('Invalid credentials');
                 }
@@ -79,6 +90,16 @@ function Login() {
                                 className="w-full px-4 py-2 rounded bg-gray-200 text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-300"
                                 required
                             />
+                        </div>
+                        <div className="flex items-center">
+                            <input
+                                type="checkbox"
+                                id="adminCheckbox"
+                                checked={isAdmin}
+                                onChange={(e) => setIsAdmin(e.target.checked)}
+                                className="mr-2"
+                            />
+                            <label htmlFor="adminCheckbox" className="text-sm text-gray-700">Login as Admin</label>
                         </div>
                         <div className="text-right text-sm">
                             <button

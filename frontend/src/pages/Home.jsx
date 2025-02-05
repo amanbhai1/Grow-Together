@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
 import SearchFilter from "../components/home/SearchFilter";
 import Testimonial from "../components/home/Testimonial";
 import HowItWorks from "../components/home/HowItWorks";
