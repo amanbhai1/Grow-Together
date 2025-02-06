@@ -3,18 +3,20 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import mentorReducer from "./mentorSlice";
 import { userReducer } from "./reducers";
+import imageReducer from "./imageSlice";
 
 // Configuration for redux-persist
 const persistConfig = {
   key: "root", // Key for persisted storage
   storage,     // Storage type (localStorage in this case)
-  whitelist: ["user", "mentors"], // Reducers to persist
+  whitelist: ["user", "mentors" , "images"], // Reducers to persist
 };
 
-// Combine all reducers
+// Combine all reducers, including imageReducer
 const rootReducer = combineReducers({
   user: userReducer,
   mentors: mentorReducer,
+  images: imageReducer, // Add the image reducer here
 });
 
 // Apply persistence to the rootReducer

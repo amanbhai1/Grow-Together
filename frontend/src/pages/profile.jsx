@@ -3,8 +3,18 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import Timestamp from '../components/timestamp';
 import toast, { Toaster } from 'react-hot-toast';
+import { useDispatch } from "react-redux";
+import { setSelectedImage } from "../redux/imageSlice";
+
 
 const Profile = () => {
+    const dispatch = useDispatch();
+  // Simulate fetching a profile image from some source
+  const profileImageUrl = "/resources/dp.jpg"; // Replace this URL with the actual profile image URL
+  useEffect(() => {
+    dispatch(setSelectedImage(profileImageUrl)); // Dispatch action to store the image in Redux state
+  }, [dispatch, profileImageUrl]);
+
     const [fname, setFname] = useState('');
     const [lname, setLname] = useState('');
     const [email, setEmail] = useState('');
@@ -84,6 +94,7 @@ const Profile = () => {
         getProfile();
     }, []);
 
+
     return (
         <div className="flex justify-center items-center my-10">
             <Toaster />
@@ -94,7 +105,7 @@ const Profile = () => {
                     </div>
                 <div className="relative flex items-center gap-6 w-1/2">
                 {/* <div className='right-0 absolute bg-[#0D9488] rounded-full w-[20px] h-[20px] editBtn'/> */}
-                    <img className="border-2 border-gray-300 rounded-full w-24 h-24" src="./resources/dp.jpg" alt="Profile" />
+                    <img className="border-2 border-gray-300 rounded-full w-24 h-24" src={profileImageUrl} alt="Profile" />
                     <h2 className="mt-2 font-semibold text-3xl">{fname} {lname}</h2>
                 </div>
                 <div className="gap-4 grid grid-cols-1 md:grid-cols-2 mt-6">
