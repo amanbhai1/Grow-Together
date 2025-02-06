@@ -54,7 +54,7 @@ const Aboutus = () => {
           <h1 className="text-5xl md:text-6xl font-bold mb-4 animate-fade-in">Grow Together</h1>
           <p className="text-2xl mb-6 animate-fade-in">One stop solution for growth and learning</p>
           <a
-            href="#contactUs"
+            href="/contactUs"
             className="px-8 py-4 bg-[#006A4E] text-white font-medium rounded-full hover:bg-[#004d36] transition duration-300 animate-bounce"
           >
             Contact Us

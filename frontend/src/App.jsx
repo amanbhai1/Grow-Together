@@ -9,7 +9,7 @@ import Aboutus from "./pages/Aboutus.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import Layout from "./components/layouts/Layout";
 import AuthLayout from "./components/layouts/AuthLayout";
-import CreateMeeting from "./pages/CreateMeeting.jsx";
+import CreateMeeting from "./pages/createmeeting.jsx";
 import Home from "./pages/Home.jsx";
 import Dash from "./pages/dash.jsx";
 import Password from "./pages/forgotPassword.jsx";
@@ -20,6 +20,7 @@ import Learner from "./pages/learner.jsx";
 import Tutor from "./pages/tutor.jsx";
 import Course from "./pages/course.jsx";
 import Manage from "./pages/manage.jsx";
+import White from "./pages/white.jsx";
 import Notification from "./pages/notification.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Search from "./pages/search.jsx";
@@ -53,6 +54,7 @@ const App = () => {
               <Route path="/mentor-category" element={<MentorCategory />} />
               <Route path="/contactus" element={<Contactus />} />
               <Route path="/aboutus" element={<Aboutus />} />
+              <Route path="/white" element={<White />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/dash" element={<Dash/>}/>
               <Route path="/whiteboard" element={<Whiteboard/>} />
