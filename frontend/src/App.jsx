@@ -29,6 +29,7 @@ import MentorDashboard from "./pages/MentorDashboard.jsx";
 import Feedback from "./pages/Feedback.jsx";
 import Whiteboard from "./pages/Whiteboard.jsx";
 import StdDash from "./pages/StdDash.jsx";
+import CreateMeeting from "./pages/createmeeting.jsx";
 
 
 const App = () => {
@@ -55,6 +56,7 @@ const App = () => {
               <Route path="/meeting" element={<Meeting />} />
               <Route path="/room/:roomid" element={<Room/>}/>
               <Route path="/stdash" element={<StdDash/>}/>
+              <Route path="/mentor/createMeeting" element={<CreateMeeting/>}/>
             </Route>
 
             {/* Auth Layout */}
