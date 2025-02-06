@@ -20,7 +20,6 @@ import Learner from "./pages/learner.jsx";
 import Tutor from "./pages/tutor.jsx";
 import Course from "./pages/course.jsx";
 import Manage from "./pages/manage.jsx";
-import White from "./pages/white.jsx";
 import Notification from "./pages/notification.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Search from "./pages/search.jsx";
@@ -54,7 +53,6 @@ const App = () => {
               <Route path="/mentor-category" element={<MentorCategory />} />
               <Route path="/contactus" element={<Contactus />} />
               <Route path="/aboutus" element={<Aboutus />} />
-              <Route path="/white" element={<White />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/dash" element={<Dash/>}/>
               <Route path="/whiteboard" element={<Whiteboard/>} />
