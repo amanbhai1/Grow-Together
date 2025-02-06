@@ -69,9 +69,9 @@ function Dash() {
                         <div className='bg-gray-300 h-16 w-16 flex items-center justify-center rounded-full text-xl font-bold'>DP</div>
                         <div>
                             <p className='text-lg font-semibold'>Name: {user.name}</p>
-                            <p className='text-gray-600'>Age: 23</p>
+                            <p className='text-gray-600'>Age: {user.age}</p>
                             <p className='text-gray-600'>Email: {user.email}</p>
-                            <p className='text-gray-600'>Phone: 8787678877</p>
+                            <p className='text-gray-600'>Phone: {user.mobile}</p>
                         </div>
                     </div>
                 </div>

@@ -46,9 +46,9 @@ function Login() {
 
         // Navigate based on role
         if (user.role === 'admin') {
-          navigate('/admin/dashboard');
+          navigate('/mentor/dashboard');
         } else {
-          navigate('/learner');
+          navigate('/dash');
         }
 
         toast.success('Login successful!');

@@ -21,6 +21,7 @@ const Profile = () => {
     const offCount = off.length;
     const user = useSelector((state) => state.user.user);
 
+
     function handleChange() {
         axios.post('http://localhost:5000/api/updateProfile', {
             userId: user.id,
