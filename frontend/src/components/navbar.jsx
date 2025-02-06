@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +10,7 @@ import { IoIosSearch } from "react-icons/io";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { MdOutlineLogout, MdMenu, MdClose } from "react-icons/md";
 import GrowTogetherLogo from '../assets/growTogetherLogo.png';
-import { use } from "react";
+// import { use } from "react";
 
 const Navbar = (item) => {
   const navigate = useNavigate();
@@ -66,17 +67,17 @@ const Navbar = (item) => {
             </>
           }
           {
-          (user.isLoggenIn && user.user.isAdmin) ? (<></>)
-          : (
-            <NavItem
-            active={activeNavItem === "search"}
-            onClick={() => handleClick("/search")}
-            tooltip="Search"
-            Icon={IoIosSearch}
-          />
-          )
+            (user.isLoggenIn && user.user.isAdmin) ? (<></>)
+              : (
+                <NavItem
+                  active={activeNavItem === "search"}
+                  onClick={() => handleClick("/search")}
+                  tooltip="Search"
+                  Icon={IoIosSearch}
+                />
+              )
           }
-         
+
           <NavItem
             active={activeNavItem === "notification"}
             onClick={() => handleClick("/notification")}
@@ -85,16 +86,16 @@ const Navbar = (item) => {
           />
           {
             (user.isLoggedIn && user.user.isAdmin) ? (<></>)
-            : (
-              <a
-            href="/signup"
-            className="text-gray-700 hover:text-teal-600 transition-all font-medium"
-          >
-            Become a Mentor
-          </a>
-            )
+              : (
+                <a
+                  href="/signup"
+                  className="text-gray-700 hover:text-teal-600 transition-all font-medium"
+                >
+                  Become a Mentor
+                </a>
+              )
           }
-      
+
           <a
             href="/"
             className="text-gray-700 hover:text-teal-600 transition-all font-medium"
@@ -156,68 +157,100 @@ const Navbar = (item) => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-16 right-0 w-full bg-white shadow-lg">
-            <div className="flex flex-col space-y-4 p-4">
-              <MobileNavItem
-                active={activeNavItem === "tutor"}
-                onClick={() => handleClick("/tutor")}
-                text="Teach"
-                Icon={LiaChalkboardTeacherSolid}
-              />
-              <MobileNavItem
-                active={activeNavItem === "learner"}
-                onClick={() => handleClick("/learner")}
-                text="Learn"
-                Icon={PiStudent}
-              />
-              <MobileNavItem
-                active={activeNavItem === "search"}
-                onClick={() => handleClick("/search")}
-                text="Search"
-                Icon={IoIosSearch}
-              />
-              <MobileNavItem
+          <div className="md:hidden absolute h-[60vh] sm:w-1/2 w-4/5 top-24 z-10 left-0 bg-white shadow-lg">
+            <div className="flex flex-col gap-6 px-4 items-center">
+              {
+                (user.isLoggedIn && user.user.isAdmin) ? (<>
+                  <NavItem
+                    active={activeNavItem === "tutor"}
+                    onClick={() => handleClick("/tutor")}
+                    tooltip="Teach"
+                    Icon={LiaChalkboardTeacherSolid}
+                  /></>) : <></>
+              }
+              {
+                (user.isLoggedIn && user.user.isAdmin) ? (<>
+                </>) : <>
+                  <NavItem
+                    active={activeNavItem === "learner"}
+                    onClick={() => handleClick("/learner")}
+                    tooltip="Learn"
+                    Icon={PiStudent}
+                  />
+                </>
+              }
+              {
+                (user.isLoggenIn && user.user.isAdmin) ? (<></>)
+                  : (
+                    <NavItem
+                      active={activeNavItem === "search"}
+                      onClick={() => handleClick("/search")}
+                      tooltip="Search"
+                      Icon={IoIosSearch}
+                    />
+                  )
+              }
+
+              <NavItem
                 active={activeNavItem === "notification"}
                 onClick={() => handleClick("/notification")}
-                text="Notification"
+                tooltip="Notification"
                 Icon={IoMdNotificationsOutline}
               />
+              {
+                (user.isLoggedIn && user.user.isAdmin) ? (<></>)
+                  : (
+                    <a
+                      href="/signup"
+                      className="text-gray-700 hover:text-teal-600 transition-all font-medium"
+                    >
+                      Become a Mentor
+                    </a>
+                  )
+              }
+
               <a
-                href="#"
-                className="text-gray-700 hover:text-teal-600 transition-all font-medium"
-              >
-                Become a Mentor
-              </a>
-              <a
-                href="#"
+                href="/"
                 className="text-gray-700 hover:text-teal-600 transition-all font-medium"
               >
                 Find a Mentor
               </a>
-              <button
-                className="px-4 py-2 text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all shadow-md hover:shadow-lg"
-                onClick={() => handleClick("/signup")}
-              >
-                Signup
-              </button>
-              <button
-                className="px-4 py-2 text-teal-600 border border-teal-600 rounded-lg hover:bg-teal-600 hover:text-white transition-all shadow-md hover:shadow-lg"
-                onClick={() => handleClick("/login")}
-              >
-                Login
-              </button>
-              <MobileNavItem
-                active={activeNavItem === "profile"}
-                onClick={() => handleClick("/profile")}
-                text="Profile"
-                Icon={FiUser}
-              />
-              <button
-                className="flex items-center justify-center px-4 py-2 text-gray-700 hover:text-teal-600 transition-all"
-                onClick={handleLogout}
-              >
-                <MdOutlineLogout className="mr-2" /> Logout
-              </button>
+              <div className="text-teal-500 font-semibold">
+                {(user.isLoggedIn) ? user.user.name : ''}
+              </div>
+              {(user.isLoggedIn) ? (
+                <button
+                  className="px-4 py-2 bg-teal-600 hover:bg-teal-800 text-white font-bold rounded"
+                  onClick={() => handleLogout()}>Logout</button>
+              ) : (
+                <>
+                  <button
+                    className="px-4 py-2 text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-all shadow-md hover:shadow-lg"
+                    onClick={() => handleClick("/signup")}
+                  >
+                    Signup
+                  </button>
+                  <button
+                    className="px-4 py-2 text-teal-600 border border-teal-600 rounded-lg hover:bg-teal-600 hover:text-white transition-all shadow-md hover:shadow-lg"
+                    onClick={() => handleClick("/login")}
+                  >
+                    Login
+                  </button>
+                </>
+              )
+              }
+              {
+                (user.isLoggedIn) ? (
+                  <NavItem
+                    active={activeNavItem === "profile"}
+                    onClick={() => handleClick("/profile")}
+                    tooltip="Profile"
+                    Icon={FiUser}
+                  />)
+                  : <>
+                  </>
+
+              }
             </div>
           </div>
         )}

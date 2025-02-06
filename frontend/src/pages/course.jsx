@@ -9,6 +9,7 @@ import { AiFillCloseCircle } from 'react-icons/ai';
 import StarRatings from 'react-star-ratings';
 import Timestamp from '../components/timestamp';
 import toast, { Toaster } from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Course = () => {
   const navigate = useNavigate();
@@ -244,59 +245,87 @@ const Course = () => {
     <div className="min-h-screen bg-gray-100 p-6">
       <Toaster />
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex justify-between items-center mb-8"
+      >
         <h1 className="text-3xl font-bold text-gray-800">{courseDetails.courseName} Videos</h1>
         <div className="flex space-x-4">
           {isEnrolled ? (
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleUnenroll}
               className="flex items-center space-x-2 bg-green-500 px-4 py-2 rounded-full text-white hover:bg-green-600 transition-all"
             >
               <IoCheckmark className="text-lg" />
               <span>Enrolled</span>
-            </button>
+            </motion.button>
           ) : (
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={handleEnroll}
               className="bg-blue-500 px-4 py-2 rounded-full text-white hover:bg-blue-600 transition-all"
             >
               Enroll
-            </button>
+            </motion.button>
           )}
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setShowPopup(true)}
             className="bg-yellow-500 px-4 py-2 rounded-full text-white hover:bg-yellow-600 transition-all"
           >
             Rate
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setSlotPopup(true)}
             className="bg-purple-500 px-4 py-2 rounded-full text-white hover:bg-purple-600 transition-all"
           >
             Appointment
-          </button>
+          </motion.button>
         </div>
-      </div>
+      </motion.div>
 
       {/* Go Back Button */}
-      <div className="mb-8">
-        <button
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="mb-8"
+      >
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={goBack}
           className="bg-gray-700 px-4 py-2 rounded-full text-white hover:bg-gray-800 transition-all"
         >
           Go Back 🡭
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
 
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 lg:space-x-8">
         {/* Video List */}
-        <div className="flex-1 bg-white rounded-lg shadow-md p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="flex-1 bg-white rounded-lg shadow-md p-6"
+        >
           <h2 className="text-xl font-semibold mb-4">Videos</h2>
           <ul className="space-y-4">
             {videos.map((item, index) => (
-              <li
+              <motion.li
                 key={index}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 onClick={() => playVideo(item)}
                 className="flex justify-between items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer transition-all"
               >
@@ -305,94 +334,139 @@ const Course = () => {
                   <Timestamp timestamp={item.createdAt} />
                 </div>
                 <div className="text-sm text-gray-500">#{item.videoSequence}</div>
-              </li>
+              </motion.li>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
         {/* Discussion Section */}
-        <div className="w-full lg:w-1/3 bg-white rounded-lg shadow-md p-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="w-full lg:w-1/3 bg-white rounded-lg shadow-md p-6"
+        >
           <Discussion courseId={courseId} course={courseDetails} senderId={user.id} />
-        </div>
+        </motion.div>
       </div>
 
       {/* Video Popup */}
-      {showPlay && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center p-6 z-50">
-          <div className="bg-white rounded-lg w-full max-w-4xl p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold">{videoDetails.videoName} now playing...</h2>
-              <button
-                onClick={() => setShowPlay(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <AiFillCloseCircle className="w-8 h-8" />
-              </button>
-            </div>
-            <Play videoDetails={videoDetails} />
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {showPlay && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center p-6 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              className="bg-white rounded-lg w-full max-w-4xl p-6"
+            >
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-semibold">{videoDetails.videoName} now playing...</h2>
+                <button
+                  onClick={() => setShowPlay(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <AiFillCloseCircle className="w-8 h-8" />
+                </button>
+              </div>
+              <Play videoDetails={videoDetails} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Rate Popup */}
-      {showPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center p-6 z-50">
-          <div className="bg-white rounded-lg w-full max-w-md p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold">Rate this course</h2>
-              <button
-                onClick={() => setShowPopup(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <AiFillCloseCircle className="w-8 h-8" />
-              </button>
-            </div>
-            <StarRatings
-              rating={rating}
-              starRatedColor="gold"
-              changeRating={handleRatingChange}
-              numberOfStars={5}
-              name="rating"
-            />
-            <button
-              onClick={rateCourse}
-              className="mt-4 bg-blue-500 px-4 py-2 rounded-full text-white hover:bg-blue-600 transition-all"
+      <AnimatePresence>
+        {showPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center p-6 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              className="bg-white rounded-lg w-full max-w-md p-6"
             >
-              Submit
-            </button>
-          </div>
-        </div>
-      )}
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-semibold">Rate this course</h2>
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <AiFillCloseCircle className="w-8 h-8" />
+                </button>
+              </div>
+              <StarRatings
+                rating={rating}
+                starRatedColor="gold"
+                changeRating={handleRatingChange}
+                numberOfStars={5}
+                name="rating"
+              />
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={rateCourse}
+                className="mt-4 bg-blue-500 px-4 py-2 rounded-full text-white hover:bg-blue-600 transition-all"
+              >
+                Submit
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Slot Popup */}
-      {slotPopup && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center p-6 z-50">
-          <div className="bg-white rounded-lg w-full max-w-md p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold">Enter your preferred slots</h2>
-              <button
-                onClick={() => setSlotPopup(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <AiFillCloseCircle className="w-8 h-8" />
-              </button>
-            </div>
-            <input
-              type="text"
-              placeholder="List your preferred date and time"
-              value={slots}
-              onChange={(e) => setSlots(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 mb-4"
-            />
-            <button
-              onClick={bookSlot}
-              className="bg-purple-500 px-4 py-2 rounded-full text-white hover:bg-purple-600 transition-all"
+      <AnimatePresence>
+        {slotPopup && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center p-6 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              className="bg-white rounded-lg w-full max-w-md p-6"
             >
-              Submit
-            </button>
-          </div>
-        </div>
-      )}
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-semibold">Enter your preferred slots</h2>
+                <button
+                  onClick={() => setSlotPopup(false)}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  <AiFillCloseCircle className="w-8 h-8" />
+                </button>
+              </div>
+              <input
+                type="text"
+                placeholder="List your preferred date and time"
+                value={slots}
+                onChange={(e) => setSlots(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 mb-4"
+              />
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={bookSlot}
+                className="bg-purple-500 px-4 py-2 rounded-full text-white hover:bg-purple-600 transition-all"
+              >
+                Submit
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

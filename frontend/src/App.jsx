@@ -24,9 +24,11 @@ import Search from "./pages/search.jsx";
 import MentorCategory from "./pages/mentors/MentorCategory.jsx";
 import Meeting from "./pages/Meeting.jsx";
 import Room from "./pages/Room.jsx";
+
 import MentorDashboard from "./pages/MentorDashboard.jsx";
 import Feedback from "./pages/Feedback.jsx";
-import LMSMeeting from "./pages/LMSMeeting.jsx";
+import Whiteboard from "./pages/Whiteboard.jsx";
+
 
 const App = () => {
   return (
@@ -48,7 +50,9 @@ const App = () => {
               <Route path="/mentor-category" element={<MentorCategory />} />
               <Route path="/feedback" element={<Feedback />} />
               <Route path="/dash" element={<Dash/>}/>
-              <Route path="/meeting" element={<LMSMeeting />} />
+              <Route path="/whiteboard" element={<Whiteboard/>} />
+              <Route path="/meeting" element={<Meeting />} />
+              <Route path="/room/:roomid" element={<Room/>}/>
             </Route>
 
             {/* Auth Layout */}
