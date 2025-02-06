@@ -7,7 +7,7 @@ import { store, persistor } from './redux/store';
 
 import Layout from "./components/layouts/Layout";
 import AuthLayout from "./components/layouts/AuthLayout";
-
+import CreateMeeting from "./pages/createmeeting.jsx";
 import Home from "./pages/Home.jsx";
 import Dash from "./pages/dash.jsx";
 import Password from "./pages/forgotPassword.jsx";
@@ -53,6 +53,7 @@ const App = () => {
               <Route path="/feedback" element={<Feedback />} />
               <Route path="/dash" element={<Dash/>}/>
               <Route path="/whiteboard" element={<Whiteboard/>} />
+              <Route path="/create-meeting" element={<CreateMeeting />} />
               <Route path="/meeting" element={<Meeting />} />
               <Route path="/room/:roomid" element={<Room/>}/>
               <Route path="/stdash" element={<StdDash/>}/>
