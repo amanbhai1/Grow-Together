@@ -130,7 +130,7 @@ const Navbar = (item) => {
             (user.isLoggedIn) ? (
               <NavItem
                 active={activeNavItem === "profile"}
-                onClick={() => handleClick("/profile")}
+                onClick={() => handleClick("/stdash")}
                 tooltip="Profile"
                 Icon={FiUser}
               />)
@@ -243,7 +243,7 @@ const Navbar = (item) => {
                 (user.isLoggedIn) ? (
                   <NavItem
                     active={activeNavItem === "profile"}
-                    onClick={() => handleClick("/profile")}
+                    onClick={() => handleClick("/stdash")}
                     tooltip="Profile"
                     Icon={FiUser}
                   />)
