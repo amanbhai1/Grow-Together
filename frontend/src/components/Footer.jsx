@@ -1,6 +1,7 @@
 import React from 'react';
 import GrowTogetherLogo from '../assets/growTogetherLogo.png'
 
+
 function Footer() {
     return (
         <footer className="bg-white border-t border-gray-200 py-8 w-5/6 mx-auto ">
@@ -36,13 +37,16 @@ function Footer() {
                         <h3 className="text-gray-800 font-bold mb-4">About</h3>
                         <ul className="space-y-2 text-gray-500">
                             <li>
-                                <a href="#" className="hover:text-gray-800">Terms & Conditions</a>
+                                <a href="/aboutus" className="hover:text-gray-800">About us</a>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-gray-800">Privacy Policy</a>
+                                <a href="/feedback" className="hover:text-gray-800">Feedback</a>
                             </li>
                             <li>
-                                <a href="#" className="hover:text-gray-800">Contact Us</a>
+                                <a href="/privacy-policy" className="hover:text-gray-800">Privacy Policy</a>
+                            </li>
+                            <li>
+                                <a href="/contactus" className="hover:text-gray-800">Contact Us</a>
                             </li>
                         </ul>
                     </div>
@@ -52,7 +56,17 @@ function Footer() {
                         <h3 className="text-gray-800 font-bold mb-4">Social</h3>
                         <ul className="space-y-2 text-gray-500">
                             <li>
-                                <a href="#" className="hover:text-gray-800">LinkedIn</a>
+                                <a href="#" className="hover:text-blue-800">LinkedIn</a>
+                            </li>
+                            <li>
+                                <a href="#" className="hover:text-pink-500">Instagram</a>
+                            </li>
+                            <li>
+                                <a href="#" className="hover:text-green-800">Watsapp</a>
+
+                            </li>
+                            <li>
+                                <a href="#" className="hover:text-blue-800">FaceBook</a>
                             </li>
                         </ul>
                     </div>

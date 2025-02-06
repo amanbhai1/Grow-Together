@@ -48,7 +48,7 @@ function Login() {
         if (user.role === 'admin') {
           navigate('/mentor/dashboard');
         } else {
-          navigate('/dash');
+          navigate('/learner');
         }
 
         toast.success('Login successful!');
