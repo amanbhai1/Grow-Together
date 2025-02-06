@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
+import { useNavigate } from "react-router-dom";
+
 import "react-calendar/dist/Calendar.css";
 import {
   FaUsers,
@@ -26,6 +28,7 @@ import {
 } from "chart.js";
 import Tutor from "./tutor";
 import dummyData from './dummy.json'; // Import the dummy data
+import Whiteboard from "./Whiteboard";
 
 // Registering chart.js components
 ChartJS.register(
@@ -48,6 +51,12 @@ const MentorDashboard = () => {
     // Simulate fetching data from an API
     setStudentProgress(dummyData);
   }, []);
+  const navigate = useNavigate();
+  useEffect(() => {
+          if (currentPage === 'Create Meeting') {
+            navigate('/mentor/createMeeting'); // Redirect to the live classes route
+          }
+        }, [currentPage, navigate]);
 
   // Sample Data for Dashboard
   const barData = {
@@ -102,8 +111,10 @@ const MentorDashboard = () => {
     "Dashboard",
     "Course Management",
     "Student Progress",
-    "Sessions",
-    "Payments",
+    "Create Meeting",
+    "Whiteboard",
+    // "Sessions",
+    // "Payments",
     "Certificates",
     "Profile & Settings",
     "Feedback",
@@ -202,10 +213,10 @@ const MentorDashboard = () => {
     { name: "Jake", message: "Would recommend!", stars: 5 },
   ];
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex">
+    <div className="flex bg-gray-900 min-h-screen text-white">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 p-6 flex flex-col">
-        <h1 className="text-xl font-bold mb-6">Mentor Dashboard</h1>
+      <aside className="flex flex-col bg-gray-800 p-6 w-64">
+        <h1 className="mb-6 font-bold text-xl">Mentor Dashboard</h1>
         <nav className="space-y-4">
           {pages.map((page) => (
             <button
@@ -222,7 +233,7 @@ const MentorDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">{currentPage}</h2>
+          <h2 className="font-bold text-2xl">{currentPage}</h2>
           <FaBell
             onClick={() => setShowNotifications(!showNotifications)}
             className="text-2xl text-gray-400 hover:text-white cursor-pointer"
@@ -232,15 +243,15 @@ const MentorDashboard = () => {
         {/* Dashboard Content */}
         {currentPage === "Dashboard" && (
           <>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="bg-gray-800 p-4 rounded shadow">
-                <h3 className="text-lg font-semibold mb-4">Weekly Enrollments</h3>
+            <div className="gap-6 grid grid-cols-1 lg:grid-cols-2">
+              <div className="bg-gray-800 shadow p-4 rounded">
+                <h3 className="mb-4 font-semibold text-lg">Weekly Enrollments</h3>
                 <div className="h-64">
                   <Bar data={barData} options={chartOptions} />
                 </div>
               </div>
-              <div className="bg-gray-800 p-4 rounded shadow">
-                <h3 className="text-lg font-semibold mb-4">Performance Overview</h3>
+              <div className="bg-gray-800 shadow p-4 rounded">
+                <h3 className="mb-4 font-semibold text-lg">Performance Overview</h3>
                 <div className="h-64">
                   <Line data={lineData} options={chartOptions} />
                 </div>
@@ -249,10 +260,10 @@ const MentorDashboard = () => {
 
             {/* Notifications */}
             <div className="mt-6">
-              <h3 className="text-xl font-semibold mb-4">Recent Notifications</h3>
-              <ul className="bg-gray-800 p-4 rounded shadow">
+              <h3 className="mb-4 font-semibold text-xl">Recent Notifications</h3>
+              <ul className="bg-gray-800 shadow p-4 rounded">
                 {notifications.map((notification, index) => (
-                  <li key={index} className="bg-gray-700 p-3 rounded mb-2">
+                  <li key={index} className="bg-gray-700 mb-2 p-3 rounded">
                     {notification.text}
                   </li>
                 ))}
@@ -268,8 +279,8 @@ const MentorDashboard = () => {
 
         {/* Student Progress Tracking */}
         {currentPage === "Student Progress" && (
-          <div className="bg-gray-800 p-4 rounded shadow">
-            <h3 className="text-lg font-semibold mb-4">Student Progress Tracking</h3>
+          <div className="bg-gray-800 shadow p-4 rounded">
+            <h3 className="mb-4 font-semibold text-lg">Student Progress Tracking</h3>
             <div className="h-64">
               <Bar data={studentChartData} options={chartOptions} />
             </div>
@@ -277,33 +288,38 @@ const MentorDashboard = () => {
         )}
 
         {/* Sessions Page */}
-        {currentPage === "Sessions" && (
-          <div className="bg-gray-800 p-4 rounded shadow">
-            <h3 className="text-lg font-semibold mb-4">Sessions</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* {currentPage === "Sessions" && (
+          <div className="bg-gray-800 shadow p-4 rounded">
+            <h3 className="mb-4 font-semibold text-lg">Sessions</h3>
+            <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {upcomingSessions.map((session, index) => (
-                <div key={index} className="bg-gray-700 p-4 rounded shadow">
+                <div key={index} className="bg-gray-700 shadow p-4 rounded">
                   <h4 className="font-bold text-lg">{session.course}</h4>
                   <p className="text-gray-400">Date & Time: {new Date(session.dateTime).toLocaleString()}</p>
-                  <button className="bg-blue-600 text-white p-2 rounded mt-2 flex items-center">
+                  <button className="flex items-center bg-blue-600 mt-2 p-2 rounded text-white">
                     <FaVideo className="mr-2" /> Join Meeting
                   </button>
-                  <p className="text-gray-400 mt-2">Meeting Link: <a href={session.link} className="text-blue-400" target="_blank" rel="noopener noreferrer">{session.link}</a></p>
+                  <p className="mt-2 text-gray-400">Meeting Link: <a href={session.link} className="text-blue-400" target="_blank" rel="noopener noreferrer">{session.link}</a></p>
                 </div>
               ))}
             </div>
           </div>
+        )} */}
+
+        {/* Whiteboard */}
+        {currentPage === "Whiteboard" && (
+          <Whiteboard />
         )}
 
 
 
         {/* Certificates Page */}
         {currentPage === "Certificates" && (
-          <div className="bg-gray-950 p-4 rounded shadow">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="bg-gray-950 shadow p-4 rounded">
+            <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {certificates.map((certificate, index) => (
-                <div key={index} className="bg-gray-900 border border-teal-600 p-4 rounded shadow">
-                  <img src={certificate.image} alt={`${certificate.course} Certificate`} className="w-full h-40 object-contain mb-2" />
+                <div key={index} className="bg-gray-900 shadow p-4 border border-teal-600 rounded">
+                  <img src={certificate.image} alt={`${certificate.course} Certificate`} className="mb-2 w-full h-40 object-contain" />
                   <h4 className="font-bold text-lg">{certificate.course}</h4>
                   <p className="text-gray-400">Awarded to: {certificate.student}</p>
                 </div>
@@ -315,9 +331,9 @@ const MentorDashboard = () => {
 
         {/* Profile & Settings Content */}
         {currentPage === "Profile & Settings" && (
-          <div className="bg-gray-800 p-4 rounded shadow">
-            <h3 className="text-lg font-semibold mb-4">Profile Settings</h3>
-            <button className="bg-red-600 text-white p-3 rounded flex items-center w-[100px] justify-center hover:bg-red-700 transition duration-300 ease-in-out">
+          <div className="bg-gray-800 shadow p-4 rounded">
+            <h3 className="mb-4 font-semibold text-lg">Profile Settings</h3>
+            <button className="flex justify-center items-center bg-red-600 hover:bg-red-700 p-3 rounded w-[100px] text-white transition duration-300 ease-in-out">
               <FaSignOutAlt className="mr-2" size={20} /> Logout
             </button>
           </div>
@@ -326,14 +342,14 @@ const MentorDashboard = () => {
         {/* {Revies} */}
         {currentPage === "Feedback" && (
           <div className="mt-6">
-            <h3 className="text-xl font-semibold mb-4">Student Reviews</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <h3 className="mb-4 font-semibold text-xl">Student Reviews</h3>
+            <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {reviews.map((review, index) => (
-                <div key={index} className="bg-gray-800 p-4 rounded shadow flex">
-                  <FaUser className="text-4xl text-gray-500 mr-4" />
+                <div key={index} className="flex bg-gray-800 shadow p-4 rounded">
+                  <FaUser className="mr-4 text-4xl text-gray-500" />
                   <div>
                     <h4 className="font-bold">{review.name}</h4>
-                    <p className="text-gray-400 mb-2">{review.message}</p>
+                    <p className="mb-2 text-gray-400">{review.message}</p>
                     <div className="flex">
                       {Array(5)
                         .fill(0)
@@ -355,8 +371,8 @@ const MentorDashboard = () => {
 
       {/* Notifications Popup */}
       {showNotifications && (
-        <div className="fixed top-0 right-0 mt-12 mr-6 bg-gray-800 p-4 rounded shadow-lg w-80 max-h-96 overflow-auto z-10">
-          <h3 className="text-lg font-semibold mb-4">Notifications</h3>
+        <div className="top-0 right-0 z-10 fixed bg-gray-800 shadow-lg mt-12 mr-6 p-4 rounded w-80 max-h-96 overflow-auto">
+          <h3 className="mb-4 font-semibold text-lg">Notifications</h3>
           <div className="space-y-4">
             {notifications.map((notification, index) => (
               <div key={index} className="flex items-center space-x-4">

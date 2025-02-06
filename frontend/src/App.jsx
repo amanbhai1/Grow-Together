@@ -9,7 +9,7 @@ import Aboutus from "./pages/Aboutus.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import Layout from "./components/layouts/Layout";
 import AuthLayout from "./components/layouts/AuthLayout";
-import CreateMeeting from "./pages/createmeeting.jsx";
+import CreateMeeting from "./pages/CreateMeeting.jsx";
 import Home from "./pages/Home.jsx";
 import Dash from "./pages/dash.jsx";
 import Password from "./pages/forgotPassword.jsx";
@@ -61,6 +61,7 @@ const App = () => {
               <Route path="/feedback" element={<GiveFeedback />} />
               <Route path="/room/:roomid" element={<Room/>}/>
               <Route path="/stdash" element={<StdDash/>}/>
+              <Route path="/mentor/createMeeting" element={<CreateMeeting/>}/>
             </Route>
 
             {/* Auth Layout */}
