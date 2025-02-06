@@ -691,5 +691,30 @@ router.post('/messages', async (req, res) => {
   }
 });
 
+router.post('/getUserDetails', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.json({
+          fname: user.fname,
+          lname: user.lname,
+          email: user.email,
+          roll: user.roll,
+          mobile: user.mobile,
+          language: user.language,
+          role: user.role
+      });
+  } catch (error) {
+      console.error('Error fetching user details:', error);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
 
 module.exports = router;
