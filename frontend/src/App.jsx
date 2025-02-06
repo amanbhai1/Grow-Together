@@ -9,7 +9,7 @@ import Aboutus from "./pages/Aboutus.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import Layout from "./components/layouts/Layout";
 import AuthLayout from "./components/layouts/AuthLayout";
-import CreateMeeting from "./pages/createmeeting.jsx";
+import CreateMeeting from "./pages/CreateMeeting.jsx";
 import Home from "./pages/Home.jsx";
 import Dash from "./pages/dash.jsx";
 import Password from "./pages/forgotPassword.jsx";
@@ -31,7 +31,6 @@ import MentorDashboard from "./pages/MentorDashboard.jsx";
 import GiveFeedback from "./pages/Feedback.jsx"
 import Whiteboard from "./pages/Whiteboard.jsx";
 import StdDash from "./pages/StdDash.jsx";
-import CreateMeeting from "./pages/createmeeting.jsx";
 
 
 const App = () => {
