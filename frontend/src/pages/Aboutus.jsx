@@ -42,8 +42,8 @@ const Aboutus = () => {
   return (
     <div>
       {/* Hero Section */}
-      <header className="relative w-full h-[400px] bg-gray-800" id="home">
-        <div className="absolute inset-0 opacity-70">
+      <header className="relative w-full h-[400px] bg-[#3B82F6]" id="home">
+        <div className="absolute inset-0 opacity-60">
           <img
             src="https://media.istockphoto.com/id/1570178815/photo/father-helping-son-with-homework.jpg?s=1024x1024&w=is&k=20&c=cSu1B3lYG-JTaTwGAQ9wiI51VociHDwSqHX75vps2mY="
             alt="Background"
@@ -52,7 +52,7 @@ const Aboutus = () => {
         </div>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white">
           <h1 className="text-5xl md:text-6xl font-bold mb-4 animate-fade-in">Grow Together</h1>
-          <p className="text-2xl mb-6 animate-fade-in">One stop solution for flour grinding services</p>
+          <p className="text-2xl mb-6 animate-fade-in">One stop solution for growth and learning</p>
           <a
             href="#contactUs"
             className="px-8 py-4 bg-[#006A4E] text-white font-medium rounded-full hover:bg-[#004d36] transition duration-300 animate-bounce"
@@ -77,9 +77,6 @@ const Aboutus = () => {
               <p className="text-gray-700 mb-6 text-lg leading-relaxed">
                 We are committed to providing a seamless experience for both mentors and students. Our platform is designed to be user-friendly, intuitive, and accessible to everyone. Whether you are a student looking for guidance or a mentor willing to share your expertise, Mentor X Student is here to help you achieve your goals.
               </p>
-              <p className="text-gray-700 text-lg leading-relaxed">
-                Our team is passionate about education and technology. We are constantly working to improve our platform and add new features to enhance the user experience. Join us on this journey and let's grow together!
-              </p>
             </div>
             <div className="w-full md:w-1/2 px-4">
               <h3 className="text-3xl font-semibold mb-6 text-gray-800">Contact Information</h3>
@@ -102,12 +99,12 @@ const Aboutus = () => {
       </section>
 
       {/* Our Team Section */}
-      <section className="bg-[#1F2937] py-16 px-4 sm:px-6 lg:px-8">
+      <section className="bg-[#F9FAFB] py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="font-semibold text-[#FBBF24] tracking-wide uppercase text-3xl sm:text-4xl animate-slide-in">
+          <h2 className="font-semibold text-[teal] tracking-wide uppercase text-3xl sm:text-4xl animate-slide-in">
             Our Team
           </h2>
-          <p className="mt-4 text-xl sm:text-2xl leading-7 text-white animate-slide-in">
+          <p className="mt-4 text-xl sm:text-2xl leading-7 text-gray-800 animate-slide-in">
             Meet the Developers
           </p>
         </div>
@@ -115,19 +112,19 @@ const Aboutus = () => {
           {teamMembers.map((member) => (
             <div
               key={member.name}
-              className="bg-[#374151] shadow-lg rounded-lg p-6 transition transform hover:-translate-y-2 hover:shadow-2xl hover:bg-[#4B5563] hover:cursor-pointer hover:shadow-[0_0_20px_10px_rgba(251,191,36,0.5)] animate-fade-in"
+              className="bg-white shadow-lg rounded-lg p-6 transition transform hover:-translate-y-2 hover:shadow-2xl hover:bg-[#F3F4F6] hover:cursor-pointer hover:shadow-[0_0_20px_10px_rgba(0,150,136,0.5)] animate-fade-in"
             >
               <img
-                className="h-40 w-40 rounded-full mx-auto border-4 border-[#FBBF24] object-cover"
+                className="h-40 w-40 rounded-full mx-auto border-4 border-[teal] object-cover"
                 src={member.image}
                 alt={member.name}
               />
               <div className="text-center mt-6">
-                <h3 className="text-2xl font-bold text-white">{member.name}</h3>
-                <p className="mt-2 text-lg text-[#FBBF24] uppercase tracking-widest">
+                <h3 className="text-2xl font-bold text-gray-800">{member.name}</h3>
+                <p className="mt-2 text-lg text-[teal] uppercase tracking-widest">
                   {member.role}
                 </p>
-                <p className="mt-4 text-sm text-gray-300">{member.description}</p>
+                <p className="mt-4 text-sm text-gray-600">{member.description}</p>
               </div>
             </div>
           ))}
@@ -157,10 +154,24 @@ const Aboutus = () => {
                 <li className="mb-3">Excellence: We strive for excellence in our platform and services.</li>
                 <li className="mb-3">Innovation: We are constantly innovating to improve the user experience.</li>
                 <li className="mb-3">Community: We believe in the power of community and collaboration.</li>
-                <li>Empathy: We care about the needs and aspirations of our users.</li>
+                <li>Empathy: We understand the needs of our users and are dedicated to helping them succeed.</li>
               </ul>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Contact Us Section */}
+      <section className="bg-[#F9FAFB] py-16 px-4 sm:px-6 lg:px-8" id="contactUs">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8">Contact Us</h2>
+          <p className="text-lg text-gray-600 mb-6">Have any questions or inquiries? Reach out to us!</p>
+          <a
+            href="mailto:aman.gupta_bca23@gla.ac.in"
+            className="px-8 py-4 bg-[teal] text-white font-medium rounded-full hover:bg-[#F9A82A] transition duration-300"
+          >
+            Email Us
+          </a>
         </div>
       </section>
     </div>
