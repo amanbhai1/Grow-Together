@@ -6,7 +6,7 @@ require('dotenv').config(); // Load environment variables
 
 const userRoutes = require('./routes/routes'); 
 const forgotPasswordRoutes = require('./routes/forgotPassword.js');
-
+const aiRouter = require("./routes/aiRoute.js");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -17,6 +17,7 @@ app.use(express.json());
 // Routes
 app.use('/api', userRoutes);
 app.use('/api/forgot-password', forgotPasswordRoutes); // ✅ Corrected route prefix
+app.use("/ai", aiRouter);
 
 // MongoDB Connection
 const connectDB = async () => {
