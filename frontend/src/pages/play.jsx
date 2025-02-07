@@ -1,64 +1,76 @@
-import React,{ useEffect, useState } from 'react'
-import { useNavigate} from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import '../style/play.css'
+import React, { useEffect, useState } from 'react';
+import 'video.js/dist/video-js.css';
+import videojs from 'video.js';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 
-const Play = () => {
-  const navigate = useNavigate();
-  const { videoId } = useParams();
-
-  function goBack() {
-    navigate(-1); 
-  }
-
+const Play = (item) => {
+  const user = useSelector((state) => state.user.user);
+  const [video, setVideo] = useState(item.videoDetails);
   const [videoUrl, setVideoUrl] = useState('');
 
-    useEffect(() => {
-        const fetchVideo = async () => {
-            try {
-                const response = await axios.post('http://localhost:5000/api/playVideo', {filename:videoId}, { responseType: 'blob' });
-                if (response) {
-                    const url = URL.createObjectURL(response.data);
-                    setVideoUrl(url);
-                } 
-                else {
-                    console.error('Failed to fetch video');
-                }
-            } catch (error) {
-                console.error('Error fetching video:', error);
-            }
-        };
+  useEffect(() => {
+    const fetchVideo = async () => {
+      try {
+        const response = await axios.post('http://localhost:5000/api/playVideo', { filename: video.videoId }, {
+          headers: {
+            Authorization: `Bearer ${user.token}`
+          }
+        });
+        if (response.data.videoUrl) {
+          setVideoUrl(response.data.videoUrl);
+        } else {
+          toast.error('Failed to fetch video');
+        }
+      } catch (error) {
+        toast.error('Error fetching video');
+      }
+    };
 
-        fetchVideo();
+    fetchVideo();
+  }, [video.videoId, user.token]);
 
-        return () => {
-            if (videoUrl) {
-                URL.revokeObjectURL(videoUrl);
-            }
-        };
-    }, [videoId]);
+  useEffect(() => {
+    if (videoUrl) {
+      const player = videojs('my-video', {
+        controls: true,
+        autoplay: true,
+        preload: 'auto'
+      });
 
-  
+      player.src({
+        src: videoUrl,
+        type: 'video/mp4' // Update the type to 'video/mp4'
+      });
+
+      return () => {
+        if (player) {
+          player.dispose();
+        }
+      };
+    }
+  }, [videoUrl]);
+
   return (
     <div className='play'>
-      <div className='play-nav'>
-        {videoId} now playing
-        <button className="go-back" onClick={goBack}>Go Back 🡭</button>
-      </div>
+      <div><Toaster /></div>
       <div className='play-box'>
-      {videoUrl ? (
-        <video width="600" controls>
-          <source src={videoUrl} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      ) : (
-        <p>Loading video...</p>
-      )}
+        {videoUrl ? (
+          <video
+            id="my-video"
+            className="video-js vjs-default-skin w-full md:w-full sm:w-72"
+            controls
+          >
+            <source src={videoUrl} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        ) : (
+          <p>Loading video...</p>
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-
-export default Play
+export default Play;

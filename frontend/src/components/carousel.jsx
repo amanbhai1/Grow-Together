@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import { MdOutlineStar } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { GrCaretPrevious } from "react-icons/gr";
@@ -80,7 +81,7 @@ const Carousel = ({ trending = [] }) => {
             <img
               src={`/images/${item?.category}.jpg`}
               alt={item?.category || 'default'}
-              className="w-full h-[230px] md:h-full object-cover "
+              className="w-full h-[230px] md:h-96 object-cover "
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-800 to-teal-900 opacity-80"></div>

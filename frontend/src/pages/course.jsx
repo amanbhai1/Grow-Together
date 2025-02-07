@@ -252,7 +252,7 @@ const Course = () => {
         className="flex justify-between items-center flex-col md:flex-col mb-8"
       >
         <h1 className="md:text-3xl font-bold text-gray-800 text-2xl">{courseDetails.courseName} Videos</h1>
-        <div className="flex space-x-2 md:space-x-4 mt-3 md:mt-0">
+        <div className="flex space-x-2 md:space-x-4 mt-3">
           {isEnrolled ? (
             <motion.button
               whileHover={{ scale: 1.05 }}
