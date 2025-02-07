@@ -9,7 +9,7 @@ import Aboutus from "./pages/Aboutus.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import Layout from "./components/layouts/Layout";
 import AuthLayout from "./components/layouts/AuthLayout";
-import CreateMeeting from "./pages/CreateMeeting.jsx";
+import CreateMeeting from "./pages/createmeeting.jsx";
 import Home from "./pages/Home.jsx";
 import Dash from "./pages/dash.jsx";
 import Password from "./pages/forgotPassword.jsx";
@@ -26,7 +26,7 @@ import Search from "./pages/search.jsx";
 import MentorCategory from "./pages/mentors/MentorCategory.jsx";
 import Meeting from "./pages/Meeting.jsx";
 import Room from "./pages/Room.jsx";
-
+import AiFeedback from "./pages/AiFeedback.jsx";
 import MentorDashboard from "./pages/MentorDashboard.jsx";
 import GiveFeedback from "./pages/Feedback.jsx"
 import Whiteboard from "./pages/Whiteboard.jsx";
@@ -52,6 +52,7 @@ const App = () => {
               <Route path="/mentor/dashboard" element={<MentorDashboard />} />
               <Route path="/mentor-category" element={<MentorCategory />} />
               <Route path="/contactus" element={<Contactus />} />
+              <Route path="/ai-feedback" element={<AiFeedback />} />
               <Route path="/aboutus" element={<Aboutus />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/dash" element={<Dash/>}/>
