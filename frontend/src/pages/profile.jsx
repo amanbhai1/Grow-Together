@@ -99,10 +99,10 @@ const Profile = () => {
         <div className="flex justify-center items-center my-10">
             <Toaster />
             <div className="relative flex flex-col bg-white shadow-lg p-6 rounded-lg w-full max-w-4xl">
-            <div className="right-10 left absolute flex flex-col mt-1 text-gray-500">
+            <div className="right-10 left absolute md:flex flex-col hidden mt-1 text-gray-500">
                         <p>Created: <Timestamp timestamp={created} /></p>
                         <p>Updated: <Timestamp timestamp={updated} /></p>
-                    </div>
+            </div>
                 <div className="relative flex items-center gap-6 w-1/2">
                 {/* <div className='right-0 absolute bg-[#0D9488] rounded-full w-[20px] h-[20px] editBtn'/> */}
                     <img className="border-2 border-gray-300 rounded-full w-24 h-24" src={profileImageUrl} alt="Profile" />
@@ -142,7 +142,7 @@ const Profile = () => {
                     </div>
                 </div>
                 <div className='flex justify-end items-center w-full'>
-                <button onClick={handleChange} className="justify-font-semibold bg-[#0D9488] hover:bg-[#1f837b] hover:shadow-xl mt-6 px-4 py-2 rounded-3xl w-1/4 text-white transition-all hover:translate-x-1 hover:-translate-y-1 delay-100">Update Profile</button>
+                <button onClick={handleChange} className="justify-font-semibold bg-[#0D9488] hover:bg-[#1f837b] hover:shadow-xl mt-6 px-4 py-2 rounded-3xl md:w-1/4 text-white transition-all hover:translate-x-1 hover:-translate-y-1 delay-100">Update Profile</button>
                 </div>
             </div>
         </div>

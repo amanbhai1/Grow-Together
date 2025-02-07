@@ -56,7 +56,7 @@ const CategoryCarousel = () => {
 
     return (
         <div
-            className="w-full lg:w-5/6 mx-auto mb-32"
+            className="w-full lg:w-5/6 mx-auto mb-0 md:mb-32"
             tabIndex={0}
             onKeyDown={handleKeyPress} // Keyboard scrolling
         >
@@ -77,7 +77,7 @@ const CategoryCarousel = () => {
                     {categories.map((category, index) => (
                         <div
                             key={index}
-                            className="flex-shrink-0 w-full md:w-2/3 md:p-12 lg:w-1/4 px-2 py-12"
+                            className="flex-shrink-0 w-full md:w-2/3 md:p-12 lg:w-1/4 md:px-2 md:py-12"
                         >
                             <div
                                 className="bg-white shadow-lg rounded-xl overflow-hidden cursor-pointer"

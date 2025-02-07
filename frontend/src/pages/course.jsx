@@ -249,10 +249,10 @@ const Course = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex justify-between items-center mb-8"
+        className="flex justify-between items-center flex-col md:flex-col mb-8"
       >
-        <h1 className="text-3xl font-bold text-gray-800">{courseDetails.courseName} Videos</h1>
-        <div className="flex space-x-4">
+        <h1 className="md:text-3xl font-bold text-gray-800 text-2xl">{courseDetails.courseName} Videos</h1>
+        <div className="flex space-x-2 md:space-x-4 mt-3 md:mt-0">
           {isEnrolled ? (
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -261,7 +261,7 @@ const Course = () => {
               className="flex items-center space-x-2 bg-green-500 px-4 py-2 rounded-full text-white hover:bg-green-600 transition-all"
             >
               <IoCheckmark className="text-lg" />
-              <span>Enrolled</span>
+              <span className='text-md md:text-lg'>Enrolled</span>
             </motion.button>
           ) : (
             <motion.button
@@ -285,7 +285,7 @@ const Course = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setSlotPopup(true)}
-            className="bg-purple-500 px-4 py-2 rounded-full text-white hover:bg-purple-600 transition-all"
+            className="bg-purple-500 px-3 md:px-4 py-2 rounded-full text-white hover:bg-purple-600 transition-all"
           >
             Appointment
           </motion.button>

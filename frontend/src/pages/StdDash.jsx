@@ -8,8 +8,10 @@ import { BookOpen, CheckCircle, Users, Layers , Video} from 'lucide-react';
 import Profile from "./profile";
 import DetailCard from "../components/detailCard";
 import toast, { Toaster } from 'react-hot-toast';
+import { Menu, X } from "lucide-react"; // Lucide icons for hamburger and close
 
 function Dashboard() {
+    const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
     const [enrolled, setEnrolled] = useState([]);
     const user = useSelector((state) => state.user?.user);
@@ -48,8 +50,6 @@ function Dashboard() {
     ]);
 
     const [courses, setCourses] = useState([
-        { name: 'Common English', description: 'Cambridge advanced.pdf', members: 48, size: '28 MB' },
-        { name: 'Business English', description: 'English Dictionary.wav', members: 30, size: '60 MB' },
         { name: 'Spanish Grammar', description: 'Easy Learning Book.zip', members: 68, size: '48 MB' },
     ]);
 
@@ -112,17 +112,24 @@ function Dashboard() {
         navigate(`/course/${item}`);
     }
     return (
-        <div className="flex bg-gray-100 h-full">
+        <div className="overflow-x-hidden relative flex bg-gray-100 h-full">
             {/* Sidebar */}
-            <div className="bg-gray-900 shadow-lg p-6 w-1/4 text-white">
+            <div className={`inset-y-0 left-0 w-64 z-[60] bg-gray-900 text-white p-6 shadow-lg transform 
+          ${isOpen ? "translate-x-0" : "-translate-x-full absolute md:relative"} transition-transform md:translate-x-0 md:w-1/4`}>
+            <button 
+          className="top-7 left-3 absolute md:hidden"
+          onClick={() => setIsOpen(false)}
+        >
+          <X size={24} />
+        </button>
                 <h2 className="mb-6 font-bold text-center text-xl">Dashboard</h2>
                 <ul>
                     {sidebarItems.map((item) => (
                         <li
-                            key={item.key}
-                            className={`flex items-center gap-3 p-3 mb-2 rounded-lg cursor-pointer transition-all hover:bg-gray-700 ${selectedItem === item.key ? 'bg-gray-800' : ''
-                                }`}
-                            onClick={() => setSelectedItem(item.key)}
+                        key={item.key}
+                        className={`flex items-center gap-3 p-3 mb-2 rounded-lg cursor-pointer transition-all hover:bg-gray-700 ${selectedItem === item.key ? 'bg-gray-800' : ''
+                        }`}
+                        onClick={() => setSelectedItem(item.key)}
                         >
                             {item.icon}
                             {item.label}
@@ -130,13 +137,19 @@ function Dashboard() {
                     ))}
                 </ul>
             </div>
+            <button 
+        className="top-4 left-4 z-50 absolute md:hidden bg-gray-900 shadow-lg p-2 rounded-lg text-white"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <Menu size={24} />
+      </button>
 
             {/* Main Content */}
-            <div className="p-6 w-3/4">
+            <div className="p-6 w-full md:w-3/4">
                 {selectedItem === 'students' && (
-                    <div className="w-full">
+                    <div className="flex flex-col justify-center items-center w-full">
                         {/* UserDetails */}
-                        <div className="mx-auto py-6 w-full">
+                        <div className="flex justify-center items-center py-6 w-full">
                             {/* <div className="flex items-center bg-white shadow-lg p-6 rounded-lg">
                                 <div className="flex justify-center items-center bg-gray-300 rounded-full w-20 h-20 font-bold text-2xl">
                                     <FiUser size={40} />
@@ -154,7 +167,7 @@ function Dashboard() {
                             </div> */}
                         <DetailCard fname={userData?.fname} lname={userData?.lname} rollno={userData?.roll || "Not available"} mobile={userData?.mobile} role={userData?.role || "Not specified"} email={userData?.email} />
                         </div>
-                        <div className="flex justify-evenly">
+                        <div className="flex md:flex-row flex-col justify-evenly gap-5">
                             {students.map((student, index) => (
                                 <div key={index} className="bg-white shadow-lg p-4 rounded-xl">
                                     <h3 className="font-semibold text-lg">{student.name}</h3>
@@ -167,7 +180,7 @@ function Dashboard() {
 
                 {selectedItem === 'courses' && (
                     <div>
-                        <h2 className="mb-4 font-semibold text-2xl">Courses</h2>
+                        <h2 className="mb-4 font-semibold text-2xl text-center md:text-left">Courses</h2>
                         <div className="gap-4 grid">
                             {courses.map((course, index) => (
                                 <div key={index} className="bg-white shadow-lg p-4 rounded-xl">
@@ -178,7 +191,7 @@ function Dashboard() {
                                 </div>
                             ))}
                         </div>
-                        <div className='bg-white shadow-md p-6 rounded-lg'>
+                        <div className='bg-white shadow-md mt-2 p-6 rounded-lg'>
                             <h2 className='mb-4 font-bold text-xl'>Enrolled Courses</h2>
                             <ul>
                                 {enrolled.map((item, index) => (
@@ -196,7 +209,7 @@ function Dashboard() {
                 )}
                 {selectedItem === 'completedTasks' && (
                     <div>
-                        <h2 className="mb-4 font-semibold text-2xl">Completed Tasks</h2>
+                        <h2 className="mb-4 font-semibold text-2xl text-center md:text-left">Completed Tasks</h2>
                         <div className="gap-4 grid">
                             {completedTasks.map((task, index) => (
                                 <div key={index} className="flex items-center gap-3 bg-white shadow-lg p-4 rounded-xl">

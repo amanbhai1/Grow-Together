@@ -46,7 +46,7 @@ function Login() {
 
         // Navigate based on role
         if (user.role === 'admin') {
-          navigate('/mentor/dashboard');
+          navigate('/tutor');
         } else {
           navigate('/learner');
         }

@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSearchQuery } from "../../redux/mentorSlice"; // Redux action
-import { NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { CiLocationOn } from "react-icons/ci";
 import { Pagination } from "@mui/material";
 import MentorCard from "./MentorCard";  // Import MentorCard component
 
@@ -45,9 +43,9 @@ const MentorCategory = () => {
     };
 
     return (
-        <div className="p-8">
+        <div className="p-4 sm:p-6 md:p-8">
             {/* Search Input */}
-            <div className="mb-4">
+            <div className="mb-6">
                 <input
                     type="text"
                     placeholder="Search mentors..."
@@ -59,9 +57,11 @@ const MentorCategory = () => {
                     }}
                 />
             </div>
-            <div className="flex px-12 md:flex-row gap-8 border w-full justify-between">
+
+            {/* Responsive Layout */}
+            <div className="flex flex-col md:flex-row gap-8 border w-full justify-between rounded-md p-4 sm:p-6">
                 {/* Category Buttons */}
-                <div className="justify-center flex flex-col w-1/6 gap-12 mb-8 h-[600px]">
+                <div className="flex md:flex-col flex-wrap justify-center gap-4 md:gap-6">
                     {categories.map((category) => (
                         <motion.button
                             key={category}
@@ -71,16 +71,20 @@ const MentorCategory = () => {
                             }}
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.9 }}
-                            className={`px-6 py-2 text-lg rounded-lg border ${activeCategory === category ? "bg-teal-300 text-white" : "bg-gray-100 text-gray-600"
-                                }`}
+                            className={`px-4 py-2 md:px-6 w-auto md:w-32 text-sm md:text-lg rounded-lg border ${
+                                activeCategory === category
+                                    ? "bg-teal-300 text-white"
+                                    : "bg-gray-100 text-gray-600"
+                            }`}
                         >
                             {category}
                         </motion.button>
                     ))}
                 </div>
-                <div className="w-6/6 px-12">
-                    {/* Mentor Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                {/* Mentor Cards */}
+                <div className="w-full px-4 sm:px-6 md:px-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <AnimatePresence>
                             {currentMentors.map((mentor) => (
                                 <MentorCard key={mentor.id} mentor={mentor} />

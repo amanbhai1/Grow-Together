@@ -9,8 +9,8 @@ const HowItWorks = () => {
     ];
 
     return (
-        <div className="py-12 w-5/5 mt-12 mx-auto">
-            <h2 className="text-4xl text-center text-gray-800">How <span className="text-teal-400">Grow</span><span className="text-red-300">Together</span> Works</h2>
+        <div className="py-12 w-5/5 mt-0 md:mt-12 mx-auto">
+            <h2 className="md:text-4xl text-3xl text-center text-gray-800 leading-10 md:leading-0">How <span className="text-teal-400">Grow</span><span className="text-red-300">Together</span> Works</h2>
             <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 space-x-6 w-5/6 mx-auto">
                 {steps.map((step, index) => (
                     <div
@@ -26,7 +26,7 @@ const HowItWorks = () => {
                             className="mb-4 mx-auto h-52 object-cover opacity-80 hover:opacity-100 transition"
                         />
                         <h3 className="text-2xl font-bold text-teal-600">{step.title}</h3>
-                        <p className="text-gray-700 mt-4 font-sans text-xl">{step.description}</p>
+                        <p className="text-gray-700 mt-4 font-sans text-md md:text-xl">{step.description}</p>
                         <NavLink to="/mentor">
                             <button className="px-12 mt-8 py-3 bg-gradient-to-r from-teal-500 to-teal-500 text-white rounded-2xl transform transition hover:scale-105 hover:from-teal-600 hover:to-teal-600 shadow-lg hover:shadow-2xl">
                                 {step.nav}
@@ -50,7 +50,7 @@ const HowItWorks = () => {
         }
     `}</style>
             <div
-                className="mt-12 bg-teal-100 py-12"
+                className="mt-9 md:mt-12 bg-teal-100 py-12"
                 style={{
                     clipPath: "polygon(0 0, 25% 5%, 60% 0, 5% -10%, 100% 0, 100% 100%, 0 100%)",
                     WebkitClipPath: "polygon(0 0, 25% 5%, 60% 0, 5% -10%, 100% 0, 100% 100%, 0 100%)",
@@ -64,9 +64,9 @@ const HowItWorks = () => {
                             src="https://img.freepik.com/free-photo/portrait-cute-young-brunette-student-holding-exercise-books-isolated-white-wall_231208-11488.jpg"
                             alt=""
                         />
-                        <div className="flex items-center gap-4 text-3xl mt-4">
+                        <div className="flex items-center gap-4 text-3xl mt-4 justify-center sm:justify-start">
                             <NavLink to='/mentee'>
-                                <button className="relative group text-4xl mt-4">
+                                <button className="relative group md:text-3xl text-2xl mt-4">
                                     Find a Mentor
                                     <span
                                         className="absolute inline-block h-full w-8 ml-2 transform opacity-0 group-hover:translate-x-2 group-hover:opacity-100 transition-all duration-300 ease-in-out"
@@ -77,7 +77,7 @@ const HowItWorks = () => {
                             </NavLink>
                         </div>
 
-                        <h3 className="text-2xl text-gray-400 mt-2">Register Now</h3>
+                        <h3 className="text-lg md:text-2xl text-center md:text-left text-gray-400 mt-2">Register Now</h3>
                     </div>
                     <div className="p-4">
                         <img className="rounded-2xl border "
@@ -86,7 +86,7 @@ const HowItWorks = () => {
                         />
                         <div className="flex items-center gap-4 text-3xl mt-4">
                             <NavLink to='/mentor'>
-                                <button className="relative group text-4xl mt-4">
+                                <button className="relative group md:text-3xl text-2xl mt-4">
                                     Become a Mentor
                                     <span
                                         className="absolute inline-block h-full w-8 ml-2 transform opacity-0 group-hover:translate-x-2 group-hover:opacity-100 transition-all duration-300 ease-in-out"
@@ -97,7 +97,7 @@ const HowItWorks = () => {
                             </NavLink>
                         </div>
 
-                        <h3 className="text-2xl text-gray-400 mt-2">Get Started</h3>
+                        <h3 className="text-gray-400 mt-2 text-lg md:text-2xl text-center md:text-left">Get Started</h3>
                     </div>
                 </div>
             </div>

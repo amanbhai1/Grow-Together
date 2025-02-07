@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../style/carousel.css';
 import { MdOutlineStar } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { GrCaretPrevious } from "react-icons/gr";
@@ -70,7 +69,7 @@ const Carousel = ({ trending = [] }) => {
             className="flex-shrink-0 flex flex-col items-center justify-center text-center bg-white  w-full h-full relative z-20"
           >
             <div className="absolute bottom-0 left-4 z-30 p-4 flex flex-col items-start bg-transparent">
-              <h3 className="text-3xl text-white font-bold">{item?.courseName}</h3>
+              <h3 className="text-xl text-white font-bold md:text-3xl">{item?.courseName}</h3>
               <button
                 onClick={() => handleTry(item.courseId)}
                 className="mt-3 h-10 px-6 rounded-full bg-teal-300 text-sm hover:shadow-lg hover:scale-105 transition-all duration-300"
@@ -81,7 +80,7 @@ const Carousel = ({ trending = [] }) => {
             <img
               src={`/images/${item?.category}.jpg`}
               alt={item?.category || 'default'}
-              className="w-full h-auto max-h-96 object-cover"
+              className="w-full h-[230px] md:h-full object-cover "
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-800 to-teal-900 opacity-80"></div>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/navbar.jsx';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';

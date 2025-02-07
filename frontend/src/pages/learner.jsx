@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { MdOutlineStar } from "react-icons/md";
 import Carousel from '../components/carousel.jsx';
+
 import toast, { Toaster } from 'react-hot-toast';
 
 function Learner() {

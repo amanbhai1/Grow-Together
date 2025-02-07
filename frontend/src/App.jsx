@@ -5,13 +5,13 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { store, persistor } from './redux/store';
 import Contactus from "./pages/Contactus.jsx";
+import Slider from './components/slider.jsx';
 import Aboutus from "./pages/Aboutus.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import Layout from "./components/layouts/Layout";
 import AuthLayout from "./components/layouts/AuthLayout";
 import CreateMeeting from "./pages/createmeeting.jsx";
 import Home from "./pages/Home.jsx";
-import Dash from "./pages/dash.jsx";
 import Password from "./pages/forgotPassword.jsx";
 import Login from "./pages/login.jsx";
 import Signup from "./pages/signup.jsx";
@@ -55,13 +55,13 @@ const App = () => {
               <Route path="/ai-feedback" element={<AiFeedback />} />
               <Route path="/aboutus" element={<Aboutus />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/dash" element={<Dash/>}/>
               <Route path="/whiteboard" element={<Whiteboard/>} />
               <Route path="/create-meeting" element={<CreateMeeting />} />
               <Route path="/meeting" element={<Meeting />} />
               <Route path="/feedback" element={<GiveFeedback />} />
               <Route path="/room/:roomid" element={<Room/>}/>
               <Route path="/stdash" element={<StdDash/>}/>
+              <Route path="/slider" element={<Slider/>}/>
               <Route path="/mentor/createMeeting" element={<CreateMeeting/>}/>
             </Route>
 

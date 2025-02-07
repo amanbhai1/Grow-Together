@@ -90,7 +90,7 @@ const FAQ = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 mt-12 mb-32 relative">
+        <div className="max-w-4xl mx-auto px-4 md:mt-12 mt-0 mb-32 relative">
             {/* Decorative Divs */}
             <div
                 className="absolute transform rotate-[55deg] bg-teal-100 rounded-2xl h-24 w-24 md:h-52 md:w-52"

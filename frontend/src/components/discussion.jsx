@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import '../style/disc.css'
 import axios from 'axios';
 import Timestamp from './timestamp';
 import { useSelector } from 'react-redux';

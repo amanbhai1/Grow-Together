@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
-import { useNavigate } from "react-router-dom";
-
 import "react-calendar/dist/Calendar.css";
+// import AdminChat from './AdminChat';
+import axios from 'axios';
 import {
   FaUsers,
   FaBookOpen,
@@ -28,7 +28,7 @@ import {
 } from "chart.js";
 import Tutor from "./tutor";
 import dummyData from './dummy.json'; // Import the dummy data
-import Whiteboard from "./Whiteboard";
+import Profile from "./profile";
 
 // Registering chart.js components
 ChartJS.register(
@@ -51,12 +51,6 @@ const MentorDashboard = () => {
     // Simulate fetching data from an API
     setStudentProgress(dummyData);
   }, []);
-  const navigate = useNavigate();
-  useEffect(() => {
-          if (currentPage === 'Create Meeting') {
-            navigate('/mentor/createMeeting'); // Redirect to the live classes route
-          }
-        }, [currentPage, navigate]);
 
   // Sample Data for Dashboard
   const barData = {
@@ -111,10 +105,9 @@ const MentorDashboard = () => {
     "Dashboard",
     "Course Management",
     "Student Progress",
-    "Create Meeting",
-    "Whiteboard",
-    // "Sessions",
-    // "Payments",
+    "Sessions",
+    "Assignments and Quizzes",
+    "Payments",
     "Certificates",
     "Profile & Settings",
     "Feedback",
@@ -180,6 +173,92 @@ const MentorDashboard = () => {
   ];
 
 
+
+
+  const [activeTab, setActiveTab] = useState("assignments");
+  const [quizTitle, setQuizTitle] = useState('');
+  const [quizQuestions, setQuizQuestions] = useState([]);
+  const [currentQuestion, setCurrentQuestion] = useState("");
+  const [options, setOptions] = useState(["", "", "", ""]);
+  const [correctAnswer, setCorrectAnswer] = useState("");
+  const [assignments, setAssignments] = useState([]);
+
+  const addQuestion = () => {
+    if (currentQuestion && options.every(opt => opt)) {
+      setQuizQuestions([...quizQuestions, { question: currentQuestion, options, correctAnswer }]);
+      setCurrentQuestion("");
+      setOptions(["", "", "", ""]);
+      setCorrectAnswer("");
+    } else {
+      alert("Please fill in all fields.");
+    }
+  };
+
+
+  // Fetch assignments on component mount
+  useEffect(() => {
+    fetchAssignments();
+  }, []);
+
+  // ✅ Fetch Assignments
+  const fetchAssignments = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/assignments");
+      setAssignments(res.data);
+    } catch (err) {
+      console.error("Error fetching assignments:", err.response?.data || err.message);
+    }
+  };
+
+
+  // ✅ Delete Assignment
+  const deleteAssignment = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/api/assignments/${id}`);
+      setAssignments(assignments.filter(assignment => assignment._id !== id));
+      alert("Assignment deleted!");
+    } catch (err) {
+      console.error("Error deleting assignment:", err.response?.data || err.message);
+    }
+  };
+
+
+
+  const uploadAssignment = async (e) => {
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+    formData.append("title", "Your Assignment Title"); // Add title if needed
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/assignments", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Set the content type
+        },
+      });
+      alert(res.data.message);
+      fetchAssignments();
+    } catch (err) {
+      console.error("Error uploading assignment:", err.response ? err.response.data : err.message);
+    }
+  };
+
+  const saveQuiz = async () => {
+    console.log("Quiz Title:", quizTitle);
+    console.log("Quiz Questions:", quizQuestions);
+
+    try {
+      await axios.post("http://localhost:5000/api/quiz", {
+        title: quizTitle,
+        questions: quizQuestions
+      });
+      alert("Quiz Added!");
+      setQuizQuestions([]); // Clear questions after saving
+    } catch (err) {
+      console.error("Error adding quiz:", err.response ? err.response.data : err.message);
+    }
+  };
+  console.log(quizQuestions);
+
   const certificates = [
     {
       course: "React Basics",
@@ -212,11 +291,15 @@ const MentorDashboard = () => {
     { name: "Ivy", message: "Helpful advice.", stars: 4 },
     { name: "Jake", message: "Would recommend!", stars: 5 },
   ];
+
+
+
+
   return (
-    <div className="flex bg-gray-900 min-h-screen text-white">
+    <div className="min-h-screen bg-gray-900 text-white flex">
       {/* Sidebar */}
-      <aside className="flex flex-col bg-gray-800 p-6 w-64">
-        <h1 className="mb-6 font-bold text-xl">Mentor Dashboard</h1>
+      <aside className="w-64 bg-gray-800 p-6 flex flex-col">
+        <h1 className="text-xl font-bold mb-6">Mentor Dashboard</h1>
         <nav className="space-y-4">
           {pages.map((page) => (
             <button
@@ -233,7 +316,7 @@ const MentorDashboard = () => {
       {/* Main Content */}
       <div className="flex-1 p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="font-bold text-2xl">{currentPage}</h2>
+          <h2 className="text-2xl font-bold">{currentPage}</h2>
           <FaBell
             onClick={() => setShowNotifications(!showNotifications)}
             className="text-2xl text-gray-400 hover:text-white cursor-pointer"
@@ -243,15 +326,15 @@ const MentorDashboard = () => {
         {/* Dashboard Content */}
         {currentPage === "Dashboard" && (
           <>
-            <div className="gap-6 grid grid-cols-1 lg:grid-cols-2">
-              <div className="bg-gray-800 shadow p-4 rounded">
-                <h3 className="mb-4 font-semibold text-lg">Weekly Enrollments</h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-gray-800 p-4 rounded shadow">
+                <h3 className="text-lg font-semibold mb-4">Weekly Enrollments</h3>
                 <div className="h-64">
                   <Bar data={barData} options={chartOptions} />
                 </div>
               </div>
-              <div className="bg-gray-800 shadow p-4 rounded">
-                <h3 className="mb-4 font-semibold text-lg">Performance Overview</h3>
+              <div className="bg-gray-800 p-4 rounded shadow">
+                <h3 className="text-lg font-semibold mb-4">Performance Overview</h3>
                 <div className="h-64">
                   <Line data={lineData} options={chartOptions} />
                 </div>
@@ -260,15 +343,20 @@ const MentorDashboard = () => {
 
             {/* Notifications */}
             <div className="mt-6">
-              <h3 className="mb-4 font-semibold text-xl">Recent Notifications</h3>
-              <ul className="bg-gray-800 shadow p-4 rounded">
+              <h3 className="text-xl font-semibold mb-4">Recent Notifications</h3>
+              <ul className="bg-gray-800 p-4 rounded shadow">
                 {notifications.map((notification, index) => (
-                  <li key={index} className="bg-gray-700 mb-2 p-3 rounded">
+                  <li key={index} className="bg-gray-700 p-3 rounded mb-2">
                     {notification.text}
                   </li>
                 ))}
               </ul>
             </div>
+
+            {/* Real time Chat */}
+            {/* <div>
+              <AdminChat />
+            </div> */}
           </>
         )}
 
@@ -279,8 +367,8 @@ const MentorDashboard = () => {
 
         {/* Student Progress Tracking */}
         {currentPage === "Student Progress" && (
-          <div className="bg-gray-800 shadow p-4 rounded">
-            <h3 className="mb-4 font-semibold text-lg">Student Progress Tracking</h3>
+          <div className="bg-gray-800 p-4 rounded shadow">
+            <h3 className="text-lg font-semibold mb-4">Student Progress Tracking</h3>
             <div className="h-64">
               <Bar data={studentChartData} options={chartOptions} />
             </div>
@@ -288,38 +376,179 @@ const MentorDashboard = () => {
         )}
 
         {/* Sessions Page */}
-        {/* {currentPage === "Sessions" && (
-          <div className="bg-gray-800 shadow p-4 rounded">
-            <h3 className="mb-4 font-semibold text-lg">Sessions</h3>
-            <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {currentPage === "Sessions" && (
+          <div className="bg-gray-800 p-4 rounded shadow">
+            <h3 className="text-lg font-semibold mb-4">Sessions</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {upcomingSessions.map((session, index) => (
-                <div key={index} className="bg-gray-700 shadow p-4 rounded">
+                <div key={index} className="bg-gray-700 p-4 rounded shadow">
                   <h4 className="font-bold text-lg">{session.course}</h4>
                   <p className="text-gray-400">Date & Time: {new Date(session.dateTime).toLocaleString()}</p>
-                  <button className="flex items-center bg-blue-600 mt-2 p-2 rounded text-white">
+                  <button className="bg-blue-600 text-white p-2 rounded mt-2 flex items-center">
                     <FaVideo className="mr-2" /> Join Meeting
                   </button>
-                  <p className="mt-2 text-gray-400">Meeting Link: <a href={session.link} className="text-blue-400" target="_blank" rel="noopener noreferrer">{session.link}</a></p>
+                  <p className="text-gray-400 mt-2">Meeting Link: <a href={session.link} className="text-blue-400" target="_blank" rel="noopener noreferrer">{session.link}</a></p>
                 </div>
               ))}
             </div>
           </div>
-        )} */}
+        )}
 
-        {/* Whiteboard */}
-        {currentPage === "Whiteboard" && (
-          <Whiteboard />
+
+        {/* Assignments And Quizzes */}
+        {currentPage === "Assignments and Quizzes" && (
+
+          <div className="bg-gray-800 p-4 rounded shadow">
+
+
+            {/* Tabs for Assignments & Quizzes */}
+            <div className="flex gap-4 mb-4">
+              <button
+                onClick={() => setActiveTab("assignments")}
+                className={`px-4 py-2 rounded ${activeTab === "assignments" ? "bg-blue-500" : "bg-gray-600"}`}>
+                Assignments
+              </button>
+              <button
+                onClick={() => setActiveTab("quizzes")}
+                className={`px-4 py-2 rounded ${activeTab === "quizzes" ? "bg-blue-500" : "bg-gray-600"}`}>
+                Quizzes
+              </button>
+            </div>
+
+            {/* Assignments Section */}
+            {activeTab === "assignments" && (
+              <div>
+                {/* Upload Section */}
+                {activeTab === "assignments" && (
+                  <div className="p-4 bg-gray-700 rounded">
+                    <h4 className="text-white mb-2">Upload Assignment</h4>
+                    <input
+                      type="file"
+                      className="mb-2 p-2 w-full bg-gray-900 text-white"
+                      onChange={uploadAssignment}
+                    />
+                    <button className="bg-green-500 px-4 py-2 rounded">Upload</button>
+                  </div>
+                )}
+
+                {/* Display Assignments */}
+                <div className="mt-4">
+                  <h4 className="text-white mb-2">Existing Assignments</h4>
+                  {assignments.map((assignment) => (
+                    <div key={assignment._id} className="bg-gray-700 p-4 rounded mb-2 flex justify-between items-center">
+                      <div>
+                        <p className="text-white">{assignment.title}</p>
+                        <a
+                          href={assignment.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-400 hover:underline"
+                        >
+                          View PDF
+                        </a>
+                      </div>
+                      <button
+                        onClick={() => deleteAssignment(assignment._id)}
+                        className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Quizzes Section */}
+            {activeTab === "quizzes" && (
+              <div className="p-4 bg-gray-700 rounded">
+                <h4 className="text-white mb-2">Create Quiz</h4>
+                <input
+                  type="text"
+                  placeholder="Quiz Title"
+                  value={quizTitle}
+                  className="mb-2 p-2 w-full bg-gray-900 text-white"
+                  onChange={(e) => setQuizTitle(e.target.value)}
+                />
+
+                {/* Question Adding Section */}
+                <div className="mt-2">
+                  <h5 className="text-white">Add Question</h5>
+                  <input
+                    type="text"
+                    placeholder="Enter Question"
+                    value={currentQuestion}
+                    onChange={(e) => setCurrentQuestion(e.target.value)}
+                    className="mb-2 p-2 w-full bg-gray-900 text-white"
+                  />
+
+                  {/* Options for MCQ */}
+                  <div className="flex flex-col gap-2">
+                    {options.map((option, index) => (
+                      <input
+                        key={index}
+                        type="text"
+                        placeholder={`Option ${index + 1}`}
+                        value={option}
+                        onChange={(e) => {
+                          const newOptions = [...options];
+                          newOptions[index] = e.target.value;
+                          setOptions(newOptions);
+                        }}
+                        className="p-2 bg-gray-900 text-white"
+                      />
+                    ))}
+                  </div>
+
+                  <input
+                    type="text"
+                    placeholder="Correct Answer"
+                    value={correctAnswer}
+                    onChange={(e) => setCorrectAnswer(e.target.value)}
+                    className="mb-2 p-2 w-full bg-gray-900 text-white"
+                  />
+
+                  <button onClick={addQuestion} className="mt-2 bg-blue-500 px-4 py-2 rounded">Add Question</button>
+
+                  <div className="mt-4">
+                    <h5 className="text-white">All Questions:</h5>
+                    <ul className="text-white">
+                      {(quizQuestions) ? (<>
+                        <table className="">
+                          <tr className="p-4">
+                            <th>Question</th>
+                            <th>Option A</th>
+                            <th>Option D</th>
+                            <th>Option C</th>
+                            <th>Option D</th>
+                          </tr>
+                          {quizQuestions.map((q, index) => (
+                            <tr key={index}>
+                              <td>{q.question}</td>
+                              {q.options.map((option) => (
+                                <td>{option}</td>
+                              ))}</tr>
+                          ))}
+                        </table></>) : null}
+                    </ul>
+                  </div>
+
+                  <button onClick={saveQuiz} className="mt-2 bg-green-500 px-4 py-2 rounded">Save Quiz</button>
+                </div>
+              </div>
+            )}
+          </div>
         )}
 
 
 
         {/* Certificates Page */}
         {currentPage === "Certificates" && (
-          <div className="bg-gray-950 shadow p-4 rounded">
-            <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="bg-gray-950 p-4 rounded shadow">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {certificates.map((certificate, index) => (
-                <div key={index} className="bg-gray-900 shadow p-4 border border-teal-600 rounded">
-                  <img src={certificate.image} alt={`${certificate.course} Certificate`} className="mb-2 w-full h-40 object-contain" />
+                <div key={index} className="bg-gray-900 border border-teal-600 p-4 rounded shadow">
+                  <img src={certificate.image} alt={`${certificate.course} Certificate`} className="w-full h-40 object-contain mb-2" />
                   <h4 className="font-bold text-lg">{certificate.course}</h4>
                   <p className="text-gray-400">Awarded to: {certificate.student}</p>
                 </div>
@@ -331,9 +560,10 @@ const MentorDashboard = () => {
 
         {/* Profile & Settings Content */}
         {currentPage === "Profile & Settings" && (
-          <div className="bg-gray-800 shadow p-4 rounded">
-            <h3 className="mb-4 font-semibold text-lg">Profile Settings</h3>
-            <button className="flex justify-center items-center bg-red-600 hover:bg-red-700 p-3 rounded w-[100px] text-white transition duration-300 ease-in-out">
+          <div className="bg-gray-800 p-4 rounded shadow">
+
+            <Profile />
+            <button className="bg-red-600 text-white p-3 rounded flex items-center w-[100px] justify-center hover:bg-red-700 transition duration-300 ease-in-out">
               <FaSignOutAlt className="mr-2" size={20} /> Logout
             </button>
           </div>
@@ -342,14 +572,14 @@ const MentorDashboard = () => {
         {/* {Revies} */}
         {currentPage === "Feedback" && (
           <div className="mt-6">
-            <h3 className="mb-4 font-semibold text-xl">Student Reviews</h3>
-            <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            <h3 className="text-xl font-semibold mb-4">Student Reviews</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {reviews.map((review, index) => (
-                <div key={index} className="flex bg-gray-800 shadow p-4 rounded">
-                  <FaUser className="mr-4 text-4xl text-gray-500" />
+                <div key={index} className="bg-gray-800 p-4 rounded shadow flex">
+                  <FaUser className="text-4xl text-gray-500 mr-4" />
                   <div>
                     <h4 className="font-bold">{review.name}</h4>
-                    <p className="mb-2 text-gray-400">{review.message}</p>
+                    <p className="text-gray-400 mb-2">{review.message}</p>
                     <div className="flex">
                       {Array(5)
                         .fill(0)
@@ -371,8 +601,8 @@ const MentorDashboard = () => {
 
       {/* Notifications Popup */}
       {showNotifications && (
-        <div className="top-0 right-0 z-10 fixed bg-gray-800 shadow-lg mt-12 mr-6 p-4 rounded w-80 max-h-96 overflow-auto">
-          <h3 className="mb-4 font-semibold text-lg">Notifications</h3>
+        <div className="fixed top-0 right-0 mt-12 mr-6 bg-gray-800 p-4 rounded shadow-lg w-80 max-h-96 overflow-auto z-10">
+          <h3 className="text-lg font-semibold mb-4">Notifications</h3>
           <div className="space-y-4">
             {notifications.map((notification, index) => (
               <div key={index} className="flex items-center space-x-4">
