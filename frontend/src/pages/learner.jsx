@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { MdOutlineStar } from "react-icons/md";
 import Carousel from '../components/carousel.jsx';
-
 import toast, { Toaster } from 'react-hot-toast';
 
 function Learner() {
@@ -40,7 +39,7 @@ function Learner() {
     }, []);
 
     return (
-        <div className="relative flex flex-col justify-start items-center h-full w-full mt-12 overflow-x-hidden">
+        <div className="relative flex flex-col justify-start items-center h-full w-full md:mt-12 overflow-x-hidden mt-5">
             {/* Parent div should have position relative */}
             <div className="h-5/6 p-6 rounded-lg relative md:w-5/6">
                 <div
@@ -54,16 +53,16 @@ function Learner() {
 
                 {/* Rest of your content */}
                 <div className="w-full">
-                    <h2 className="text-gray-800 text-2xl font-semibold mb-4">Trending Courses</h2>
+                    <h2 className="text-gray-800 text-xl md:text-2xl font-semibold mb-4">Trending Courses</h2>
                     <Carousel trending={trending} />
                 </div>
                 <div className="w-full mt-20">
-                    <h2 className="text-gray-800 text-2xl font-semibold mb-4">Enrolled Courses</h2>
-                    <ul className="mt-12 w-full grid grid-cols-3 space-y-4">
+                    <h2 className="text-gray-800 text-xl md:text-2xl font-semibold mb-4">Enrolled Courses</h2>
+                    <ul className="md:mt-12 mt-5 w-full grid grid-row-3 md:grid-cols-3 space-y-4">
                         {enrolled.map((item, index) => (
                             <li
                                 key={index}
-                                className="border  flex flex-col bg-gray-100 shadow-sm p-4 rounded-lg cursor-pointer hover:shadow-md transition"
+                                className="border flex flex-col bg-gray-100 shadow-sm p-4 rounded-lg cursor-pointer hover:shadow-md transition"
                                 onClick={() => handleEnrolled(item.courseId)}
                             >
                                 <img
